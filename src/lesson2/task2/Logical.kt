@@ -4,6 +4,8 @@ package lesson2.task2
 
 import lesson1.task1.sqr
 import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.sqrt
 
 /**
@@ -30,12 +32,8 @@ fun isNumberHappy(number: Int): Boolean =
  * Определить, угрожают ли они друг другу. Вернуть true, если угрожают.
  * Считать, что ферзи не могут загораживать друг друга.
  */
-fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
-    if (x1 == x2) return true
-    else if (y1 == y2) return true
-    else if (abs(x1-x2) == abs(y1-y2)) return true
-    else return false
-}
+fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean =
+    (x1 == x2) || (y2 == y1) || (Math.abs(x2 - x1) == Math.abs(y2 - y1))
 
 
 /**
@@ -45,19 +43,15 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
  * Вернуть число дней в этом месяце этого года по григорианскому календарю.
  */
 fun daysInMonth(month: Int, year: Int): Int {
-    if (month == 2) {if (year % 400 == 0) return 29 else if (year % 100 == 0) return 28
-        else if (year % 4 == 0) return 29 else return 28 }
+    if (month == 2) {return when{
+        (year % 400 == 0) -> 29
+        (year % 100 == 0) -> 28
+        (year % 4 == 0) -> 29
+        else -> 28 }}
     else return when {
-        month == 1 -> 31
-        month == 3 -> 31
-        month == 5 -> 31
-        month == 7 -> 31
-        month == 8 -> 31
-        month == 10 -> 31
-        month == 12 -> 31
-        month == 4 -> 30
-        month == 6 -> 30
-        month == 9 -> 30
+        month == 1 || month == 3 || month == 5 || month == 7 ||
+        month == 8 || month == 10 || month == 12 -> 31
+        month == 4 || month == 6 || month == 9 -> 30
         else -> 30
     }
 }
@@ -83,6 +77,6 @@ fun circleInside(
  * Вернуть true, если кирпич пройдёт
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean =
-    (a * b <= r * s && ((a <= r && b <= s) || (a <= s && b <= r))) ||
-            (a * c <= r * s && ((a <= r && c <= s) || (a <= s && c <= r))) ||
-            (b * c <= r * s && ((b <= r && c <= s) || (b <= s && c <= r)))
+    (a * b <= r * s && max(a, b) <= max(r, s) && min(a, b) <= min(r, s)) ||
+            (a * c <= r * s && max(a, c) <= max(r, s) && min(a, c) <= min(r, s)) ||
+            (b * c <= r * s && max(b, c) <= max(r, s) && min(b, c) <= min(r, s))
