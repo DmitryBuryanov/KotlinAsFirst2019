@@ -156,7 +156,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
         if (m1 > n1) m1 -= n1
         else n1 -= m1
     }
-    return if (m1 == 1) true else false
+    return m1 == 1
 }
 
 /**
@@ -258,6 +258,7 @@ fun revert(n: Int): Int {
     }
     return n3
 }
+
 
 /**
  * Средняя

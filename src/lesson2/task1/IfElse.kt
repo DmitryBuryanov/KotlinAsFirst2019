@@ -89,7 +89,7 @@ fun timeForHalfWay(
     t1: Double, v1: Double,
     t2: Double, v2: Double,
     t3: Double, v3: Double
-):Double {
+): Double {
     val halfS = (v1 * t1 + v2 * t2 + v3 * t3) / 2.0
     return when {
         halfS > v1 * t1 + v2 * t2 -> t1 + t2 + (halfS - (v1 * t1 + v2 * t2)) / v3
@@ -148,8 +148,9 @@ fun rookOrBishopThreatens(
 ): Int {
     if (abs(bishopX - kingX) == abs(bishopY - kingY)) {
         return if (kingX == rookX) 3 else if (kingY == rookY) 3 else 2
+    } else {
+        return if (kingX == rookX) 1 else if (kingY == rookY) 1 else 0
     }
-    else {return if (kingX == rookX) 1 else if (kingY == rookY) 1 else 0}
 }
 
 /**
@@ -161,8 +162,8 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    val min = min(a, min(b,c))
-    val max = max(a, max(b,c))
+    val min = min(a, min(b, c))
+    val max = max(a, max(b, c))
     val medium = a + b + c - min - max
     if (min + medium < max) return -1
     else {
@@ -185,9 +186,8 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
     val min = min(min(a, b), min(c, d))
     if (min == a) {
-        return if (c > b) -1 else if (b > d) (d-c) else (b-c)
-    }
-    else {
+        return if (c > b) -1 else if (b > d) (d - c) else (b - c)
+    } else {
         return if (a > d) -1 else if (d > b) (b - a) else (d - a)
     }
 }
