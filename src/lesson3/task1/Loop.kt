@@ -73,11 +73,11 @@ fun digitNumber(n: Int): Int {
     var count = 0
     var number = n
     if (number == 0) return 1
-    else {while (number > 0) {
+    while (number != 0) {
         count += 1
         number /= 10
     }
-    return count}
+    return count
 }
 
 /**
