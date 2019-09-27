@@ -3,7 +3,9 @@
 package lesson3.task1
 
 import lesson1.task1.sqr
+import kotlin.math.PI
 import kotlin.math.pow
+import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
 /**
@@ -91,7 +93,7 @@ fun fib(n: Int): Int {
     var fib2 = 1
     var next = fib1 + fib2
     if (n < 3) return 1
-    else for (i in 3..n - 1) {
+    else for (i in 3 until n) {
         fib1 = fib2
         fib2 = next
         next = fib1 + fib2
@@ -108,7 +110,7 @@ fun fib(n: Int): Int {
 fun lcm(m: Int, n: Int): Int {
     var n1 = n
     var m1 = m
-    var mn = m1 * n1
+    val mn = m1 * n1
     while (m1 != n1) {
         if (m1 > n1) m1 -= n1
         else n1 -= m1
@@ -134,13 +136,7 @@ fun minDivisor(n: Int): Int {
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int {
-    var div = n - 1
-    while (n % div != 0) {
-        div -= 1
-    }
-    return  div
-}
+fun maxDivisor(n: Int): Int = n / minDivisor(n)
 
 /**
  * Простая
@@ -195,7 +191,7 @@ fun collatzSteps(x: Int): Int {
     while (x1 != 1) {
         if (x1 % 2 == 0) x1 /= 2
         else x1 = 3 * x1 + 1
-        count +=1
+        count += 1
     }
     return count
 }
@@ -210,19 +206,20 @@ fun collatzSteps(x: Int): Int {
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
 fun sin(x: Double, eps: Double): Double {
+    var x1 = x
     var n = 1
     var sinx = 0.0
     var el = 0.0
-    do {
-        el = x.pow(n) / (factorial(n)).toDouble()
-        if (n /2 % 2 != 0) el = el * (-1.0)
+    if ((x1 % (2 * PI)).toInt() == 0) x1 = 0.0
+    else if ((x1 % PI).toInt() == 0) x1 = PI
+    while (x1.pow(n) / factorial(n) > eps) {
+        el = x1.pow(n) / factorial(n)
+        if (n / 2 % 2 == 1) el = - el
         sinx += el
         n += 2
-    } while (x.pow(n) / (factorial(n)).toDouble() > eps)
-    el = x.pow(n) / (factorial(n)).toDouble()
-    if (n /2 % 2 != 0) el = el * (-1.0)
-    sinx += el
-    return sinx
+    }
+    sinx += x1.pow(n + 2) / factorial(n + 2)
+    return sinx.toInt().toDouble()
 }
 
 /**
@@ -234,7 +231,26 @@ fun sin(x: Double, eps: Double): Double {
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
-fun cos(x: Double, eps: Double): Double = TODO()
+fun cos(x: Double, eps: Double): Double {
+    var x1 = x
+    var n = 0
+    var cosx = 0.0
+    var el = 0.0
+    if ((x1 % (2 * PI)).toInt() == 0) x1 = 0.0
+    else if ((x1 % PI).toInt() == 0) x1 = PI
+    while (x1.pow(n) / factorial(n) > eps) {
+        el = x1.pow(n) / factorial(n)
+        if ((n / 2) % 2 == 1) el *= (- 1)
+        cosx += el
+        n += 2
+    }
+    cosx += x1.pow(n + 2) / factorial(n + 2)
+    return cosx.toInt().toDouble()
+}
+
+fun main() {
+    print(cos( 100 * PI, 1e-5))
+}
 
 /**
  * Средняя
@@ -270,13 +286,7 @@ fun revert(n: Int): Int {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun isPalindrome(n: Int): Boolean {
-    var count = 0
-    var n1 = n
-    while (n1 > 0) {
-        count = count * 10 + n1 % 10
-        n1 /= 10
-    }
-    return if (count == n) true else false
+    return n == revert(n)
 }
 
 /**
@@ -296,13 +306,13 @@ fun hasDifferentDigits(n: Int): Boolean {
         count += 1
         n1 /= 10
     }
-    if (count == 1) return false
-    else { for (i in 1..count - 1) {
+    return if (count == 1) false
+    else { for (i in 1 until count) {
         if (n2 % 10 != n2 / 10 % 10) digits += 1
         n2 /= 10
     }
-        if (digits != 1) return true
-        else return false}
+        digits != 1
+    }
 }
 
 /**
@@ -315,33 +325,23 @@ fun hasDifferentDigits(n: Int): Boolean {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun squareSequenceDigit(n: Int): Int {
-    var countn = 0
+    var seq = 1
+    var n1 = 1
+    var dgtN = 1
+    var dgtSeq = 1
     var number = 1
-    var countp = 0
-    var p = 1
-    var p1 = p
-    var sqrnumber = number*number
-    while (n > countp) {
-        number += 1
-        sqrnumber = number*number
-        countn = 0
-        while (sqrnumber > 0) {
-            countn += 1
-            sqrnumber /= 10
-        }
-        p = p  * 10.toDouble().pow(countn).toInt() + number*number
-        p1 = p
-        countp = 0
-        while (p1 > 0) {
-            countp += 1
-            p1 /= 10
-        }
+    while (dgtN < n) {
+        n1 += 1
+        seq = sqr(n1)
+        dgtSeq = digitNumber(seq)
+        dgtN += digitNumber(seq)
     }
-    while (countp > n) {
-        countp -= 1
-        p /= 10
+    number = n - ( dgtN - dgtSeq)
+    while (dgtSeq != number) {
+        seq /= 10
+        dgtSeq = digitNumber(seq)
     }
-    return p % 10
+    return seq % 10
 }
 
 /**
@@ -354,30 +354,21 @@ fun squareSequenceDigit(n: Int): Int {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun fibSequenceDigit(n: Int): Int {
-    var number = 2
-    var countp = 2
-    var p = 11
-    var p1 = p
-    var countn = 0
-    var fibnumber = fib(number)
-    if (n < 3) return 1
-    while (n > countp) {
-        number += 1
-        while (fibnumber > 0) {
-            fibnumber /= 10
-            countn += 1
-        }
-        p = p * 10.toDouble().pow(countn).toInt() + fib(number)
-        countp = 0
-        p1 = p
-        while (p1 > 0) {
-            countp += 1
-            p1 /= 1
-        }
+    var seq = 1
+    var n1 = 1
+    var dgtN = 1
+    var dgtSeq = 1
+    var number = 1
+    while (dgtN < n) {
+        n1 += 1
+        seq = fib(n1)
+        dgtSeq = digitNumber(seq)
+        dgtN += digitNumber(seq)
     }
-    while (n < countp) {
-        countp -= 1
-        p /= 10
+    number = n - ( dgtN - dgtSeq)
+    while (dgtSeq != number) {
+        seq /= 10
+        dgtSeq = digitNumber(seq)
     }
-    return p % 10
+    return seq % 10
 }

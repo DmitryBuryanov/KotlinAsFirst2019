@@ -112,21 +112,14 @@ fun whichRookThreatens(
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
 ): Int {
-    if (kingX == rookX1) return when {
-        (kingX == rookX2) -> 3
-        (kingY == rookY2) -> 3
-        else -> 1
-    }
-    if (kingX == rookX2) return when {
-        (kingY == rookY1) -> 3
-        else -> 2
-    }
-    if (kingY == rookY1) return when {
-        (kingY == rookY2) -> 3
-        else -> 1
-    }
     return when {
-        (kingY == rookY2) -> 2
+        kingX == rookX1 && (kingX == rookX2 || kingY == rookY2) -> 3
+        kingX == rookX1 -> 1
+        kingX == rookX2 && kingY == rookY1 -> 3
+        kingX == rookX2 -> 2
+        kingY == rookY1 && kingY == rookY2 -> 3
+        kingY == rookY1 -> 1
+        kingY == rookY2 -> 2
         else -> 0
     }
 }
@@ -146,10 +139,14 @@ fun rookOrBishopThreatens(
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
 ): Int {
-    if (abs(bishopX - kingX) == abs(bishopY - kingY)) {
-        return if (kingX == rookX) 3 else if (kingY == rookY) 3 else 2
-    } else {
-        return if (kingX == rookX) 1 else if (kingY == rookY) 1 else 0
+    return when {
+        abs(bishopX - kingX) == abs(bishopY - kingY) &&
+                (kingX == rookX) -> 3
+        abs(bishopX - kingX) == abs(bishopY - kingY) &&
+                (kingY == rookY) -> 3
+        abs(bishopX - kingX) == abs(bishopY - kingY) -> 2
+        (kingX == rookX) || (kingY == rookY) -> 1
+        else -> 0
     }
 }
 
@@ -185,10 +182,15 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
     val min = min(min(a, b), min(c, d))
-    if (min == a) {
-        return if (c > b) -1 else if (b > d) (d - c) else (b - c)
-    } else {
-        return if (a > d) -1 else if (d > b) (b - a) else (d - a)
+    if (min == a) return when {
+        (c > b) -> -1
+        (b > d) -> (d - c)
+        else -> (b - c)
+    }
+    else return when {
+        (a > d) -> -1
+        (d > b) -> (b - a)
+        else -> (d - a)
     }
 }
 
