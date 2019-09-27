@@ -3,10 +3,7 @@
 package lesson3.task1
 
 import lesson1.task1.sqr
-import kotlin.math.PI
-import kotlin.math.pow
-import kotlin.math.roundToInt
-import kotlin.math.sqrt
+import kotlin.math.*
 
 /**
  * Пример
@@ -206,15 +203,13 @@ fun collatzSteps(x: Int): Int {
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
 fun sin(x: Double, eps: Double): Double {
-    var x1 = x
+    var x1 = x % (2 * PI)
     var n = 1
     var sinx = 0.0
     var el = 0.0
-    if ((x1 % (2 * PI)).toInt() == 0) x1 = 0.0
-    else if ((x1 % PI).toInt() == 0) x1 = PI
-    while (x1.pow(n) / factorial(n) > eps) {
-        el = x1.pow(n) / factorial(n)
-        if (n / 2 % 2 == 1) el = - el
+    while (abs(x1.pow(n) / factorial(n)) >= eps) {
+        el = x1.pow(n) / (factorial(n))
+        if ((n / 2) % 2 == 1) el *= (-1)
         sinx += el
         n += 2
     }
@@ -231,22 +226,17 @@ fun sin(x: Double, eps: Double): Double {
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
 fun cos(x: Double, eps: Double): Double {
-    var x1 = x
+    var x1 = x % (2 * PI)
     var n = 0
     var cosx = 0.0
     var el = 0.0
-    if ((x1 % (2 * PI)).toInt() == 0) x1 = 0.0
-    else if ((x1 % PI).toInt() == 0) x1 = PI
-    while (x1.pow(n) / factorial(n) > eps) {
-        el = x1.pow(n) / factorial(n)
+    while (abs(x1.pow(n) / factorial(n)) >= eps) {
+        el = x1.pow(n) / (factorial(n))
         if ((n / 2) % 2 == 1) el *= (- 1)
         cosx += el
         n += 2
     }
     return cosx
-}
-fun main() {
-    print(sin(-18.832102629018816, 1e-10))
 }
 
 /**
