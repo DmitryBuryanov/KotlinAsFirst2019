@@ -248,10 +248,6 @@ fun cos(x: Double, eps: Double): Double {
     return cosx.toInt().toDouble()
 }
 
-fun main() {
-    print(cos( 100 * PI, 1e-5))
-}
-
 /**
  * Средняя
  *
