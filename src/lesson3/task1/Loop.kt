@@ -218,7 +218,6 @@ fun sin(x: Double, eps: Double): Double {
         sinx += el
         n += 2
     }
-    sinx += x1.pow(n + 2) / factorial(n + 2)
     return sinx
 }
 
@@ -244,8 +243,10 @@ fun cos(x: Double, eps: Double): Double {
         cosx += el
         n += 2
     }
-    cosx += x1.pow(n + 2) / factorial(n + 2)
     return cosx
+}
+fun main() {
+    print(sin(-18.832102629018816, 1e-10))
 }
 
 /**
