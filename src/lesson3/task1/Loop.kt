@@ -291,10 +291,11 @@ fun hasDifferentDigits(n: Int): Boolean {
         n1 /= 10
     }
     return if (count == 1) false
-    else {for (i in 1 until count) {
-        if (n2 % 10 != n2 / 10 % 10) digits += 1
-        n2 /= 10
-    }
+    else {
+        for (i in 1 until count) {
+            if (n2 % 10 != n2 / 10 % 10) digits += 1
+            n2 /= 10
+        }
         digits != 1
     }
 }
