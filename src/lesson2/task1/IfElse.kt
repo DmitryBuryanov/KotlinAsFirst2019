@@ -111,18 +111,13 @@ fun whichRookThreatens(
     kingX: Int, kingY: Int,
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
-): Int {
-    return when {
-        kingX == rookX1 && (kingX == rookX2 || kingY == rookY2) -> 3
-        kingX == rookX1 -> 1
-        kingX == rookX2 && kingY == rookY1 -> 3
-        kingX == rookX2 -> 2
-        kingY == rookY1 && kingY == rookY2 -> 3
-        kingY == rookY1 -> 1
-        kingY == rookY2 -> 2
-        else -> 0
+): Int = when {
+    (kingX == rookX1 || kingY == rookY1) && (kingX == rookX2 || kingY == rookY2) -> 3
+    (kingX == rookX1) || (kingY == rookY1) -> 1
+    (kingX == rookX2) || (kingY == rookY2) -> 2
+    else -> 0
     }
-}
+
 
 /**
  * Простая
@@ -138,17 +133,14 @@ fun rookOrBishopThreatens(
     kingX: Int, kingY: Int,
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
-): Int {
-    return when {
+): Int = when {
         abs(bishopX - kingX) == abs(bishopY - kingY) &&
-                (kingX == rookX) -> 3
-        abs(bishopX - kingX) == abs(bishopY - kingY) &&
-                (kingY == rookY) -> 3
+                ((kingX == rookX) || (kingY == rookY)) -> 3
         abs(bishopX - kingX) == abs(bishopY - kingY) -> 2
         (kingX == rookX) || (kingY == rookY) -> 1
         else -> 0
     }
-}
+
 
 /**
  * Простая
@@ -162,14 +154,12 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
     val min = min(a, min(b, c))
     val max = max(a, max(b, c))
     val medium = a + b + c - min - max
-    if (min + medium < max) return -1
-    else {
-        return when {
+    return if (min + medium < max) -1
+    else when {
             sqr(max) < sqr(medium) + sqr(min) -> 0
             sqr(max) == sqr(medium) + sqr(min) -> 1
             else -> 2
         }
-    }
 }
 
 /**
@@ -182,12 +172,12 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
     val min = min(min(a, b), min(c, d))
-    if (min == a) return when {
+    return if (min == a) when {
         (c > b) -> -1
         (b > d) -> (d - c)
         else -> (b - c)
     }
-    else return when {
+    else when {
         (a > d) -> -1
         (d > b) -> (b - a)
         else -> (d - a)

@@ -203,10 +203,10 @@ fun collatzSteps(x: Int): Int {
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
 fun sin(x: Double, eps: Double): Double {
-    var x1 = x % (2 * PI)
+    val x1 = x % (2 * PI)
     var n = 1
     var sinx = 0.0
-    var el = 0.0
+    var el: Double
     while (abs(x1.pow(n) / factorial(n)) >= eps) {
         el = x1.pow(n) / (factorial(n))
         if ((n / 2) % 2 == 1) el *= (-1)
@@ -226,13 +226,13 @@ fun sin(x: Double, eps: Double): Double {
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
 fun cos(x: Double, eps: Double): Double {
-    var x1 = x % (2 * PI)
+    val x1 = x % (2 * PI)
     var n = 0
     var cosx = 0.0
-    var el = 0.0
+    var el: Double
     while (abs(x1.pow(n) / factorial(n)) >= eps) {
         el = x1.pow(n) / (factorial(n))
-        if ((n / 2) % 2 == 1) el *= (- 1)
+        if ((n / 2) % 2 == 1) el *= (-1)
         cosx += el
         n += 2
     }
@@ -262,7 +262,6 @@ fun revert(n: Int): Int {
     return n3
 }
 
-
 /**
  * Средняя
  *
@@ -272,9 +271,7 @@ fun revert(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean {
-    return n == revert(n)
-}
+fun isPalindrome(n: Int) = n == revert(n)
 
 /**
  * Средняя
@@ -294,7 +291,7 @@ fun hasDifferentDigits(n: Int): Boolean {
         n1 /= 10
     }
     return if (count == 1) false
-    else { for (i in 1 until count) {
+    else {for (i in 1 until count){
         if (n2 % 10 != n2 / 10 % 10) digits += 1
         n2 /= 10
     }
@@ -316,14 +313,14 @@ fun squareSequenceDigit(n: Int): Int {
     var n1 = 1
     var dgtN = 1
     var dgtSeq = 1
-    var number = 1
+    var number: Int
     while (dgtN < n) {
         n1 += 1
         seq = sqr(n1)
         dgtSeq = digitNumber(seq)
         dgtN += digitNumber(seq)
     }
-    number = n - ( dgtN - dgtSeq)
+    number = n - (dgtN - dgtSeq)
     while (dgtSeq != number) {
         seq /= 10
         dgtSeq = digitNumber(seq)
@@ -345,14 +342,14 @@ fun fibSequenceDigit(n: Int): Int {
     var n1 = 1
     var dgtN = 1
     var dgtSeq = 1
-    var number = 1
+    var number: Int
     while (dgtN < n) {
         n1 += 1
         seq = fib(n1)
         dgtSeq = digitNumber(seq)
         dgtN += digitNumber(seq)
     }
-    number = n - ( dgtN - dgtSeq)
+    number = n - (dgtN - dgtSeq)
     while (dgtSeq != number) {
         seq /= 10
         dgtSeq = digitNumber(seq)
