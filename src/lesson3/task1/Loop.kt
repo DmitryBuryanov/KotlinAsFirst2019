@@ -314,7 +314,7 @@ fun squareSequenceDigit(n: Int): Int {
     var n1 = 1
     var dgtN = 1
     var dgtSeq = 1
-    var number: Int
+    val number: Int
     while (dgtN < n) {
         n1 += 1
         seq = sqr(n1)
@@ -343,7 +343,7 @@ fun fibSequenceDigit(n: Int): Int {
     var n1 = 1
     var dgtN = 1
     var dgtSeq = 1
-    var number: Int
+    val number: Int
     while (dgtN < n) {
         n1 += 1
         seq = fib(n1)
