@@ -71,11 +71,10 @@ fun digitCountInNumber(n: Int, m: Int): Int =
 fun digitNumber(n: Int): Int {
     var count = 0
     var number = n
-    if (number == 0) return 1
-    while (number != 0) {
+    do {
         count += 1
         number /= 10
-    }
+    } while (number != 0)
     return count
 }
 
@@ -90,7 +89,7 @@ fun fib(n: Int): Int {
     var fib2 = 1
     var next = fib1 + fib2
     if (n < 3) return 1
-    else for (i in 3 until n) {
+    for (i in 3 until n) {
         fib1 = fib2
         fib2 = next
         next = fib1 + fib2
@@ -104,16 +103,18 @@ fun fib(n: Int): Int {
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
-fun lcm(m: Int, n: Int): Int {
+fun m1(m: Int, n: Int): Int {
     var n1 = n
     var m1 = m
-    val mn = m1 * n1
     while (m1 != n1) {
         if (m1 > n1) m1 -= n1
         else n1 -= m1
     }
-    return mn / m1
+    return m1
 }
+
+fun lcm(m: Int, n: Int): Int = m * n / m1(m, n)
+
 
 /**
  * Простая
@@ -142,15 +143,7 @@ fun maxDivisor(n: Int): Int = n / minDivisor(n)
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean {
-    var m1 = m
-    var n1 = n
-    while (m1 != n1) {
-        if (m1 > n1) m1 -= n1
-        else n1 -= m1
-    }
-    return m1 == 1
-}
+fun isCoPrime(m: Int, n: Int): Boolean = m1(m, n) == 1
 
 /**
  * Простая
@@ -247,19 +240,13 @@ fun cos(x: Double, eps: Double): Double {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun revert(n: Int): Int {
-    var count = 0
     var n1 = n
-    var n2 = n
-    var n3 = 0
-    while (n1 > 0) {
+    var n2 = 0
+    for (i in 1..digitNumber(n)) {
+        n2 = n2 * 10 + n1 % 10
         n1 /= 10
-        count += 1
     }
-    for (i in 1..count) {
-        n3 = n3 * 10 + n2 % 10
-        n2 /= 10
-    }
-    return n3
+    return n2
 }
 
 /**
@@ -282,22 +269,14 @@ fun isPalindrome(n: Int) = n == revert(n)
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun hasDifferentDigits(n: Int): Boolean {
-    var count = 0
     var digits = 1
     var n1 = n
-    var n2 = n
-    while (n1 > 0) {
-        count += 1
+    if (digitNumber(n) == 1) return false
+    for (i in 1 until digitNumber(n)) {
+        if (n1 % 10 != n1 / 10 % 10) digits += 1
         n1 /= 10
     }
-    return if (count == 1) false
-    else {
-        for (i in 1 until count) {
-            if (n2 % 10 != n2 / 10 % 10) digits += 1
-            n2 /= 10
-        }
-        digits != 1
-    }
+    return digits != 1
 }
 
 /**
