@@ -103,7 +103,7 @@ fun fib(n: Int): Int {
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
-fun m1(m: Int, n: Int): Int {
+fun nod(m: Int, n: Int): Int {
     var n1 = n
     var m1 = m
     while (m1 != n1) {
@@ -113,7 +113,7 @@ fun m1(m: Int, n: Int): Int {
     return m1
 }
 
-fun lcm(m: Int, n: Int): Int = m * n / m1(m, n)
+fun lcm(m: Int, n: Int): Int = m * n / nod(m, n)
 
 
 /**
@@ -143,7 +143,7 @@ fun maxDivisor(n: Int): Int = n / minDivisor(n)
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean = m1(m, n) == 1
+fun isCoPrime(m: Int, n: Int): Boolean = nod(m, n) == 1
 
 /**
  * Простая
@@ -154,7 +154,7 @@ fun isCoPrime(m: Int, n: Int): Boolean = m1(m, n) == 1
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {
     for (i in m..n) {
-        if (i.toInt() == sqr((sqrt(i.toDouble())).toInt())) return true
+        if (i == sqr((sqrt(i.toDouble())).toInt())) return true
     }
     return false
 }
@@ -199,12 +199,12 @@ fun sin(x: Double, eps: Double): Double {
     val x1 = x % (2 * PI)
     var n = 1
     var sinx = 0.0
-    var el: Double
+    var el : Double
     while (abs(x1.pow(n) / factorial(n)) >= eps) {
-        el = x1.pow(n) / (factorial(n))
+        el = x1.pow(n) / factorial(n)
         if ((n / 2) % 2 == 1) el *= (-1)
-        sinx += el
         n += 2
+        sinx += el
     }
     return sinx
 }
@@ -273,10 +273,10 @@ fun hasDifferentDigits(n: Int): Boolean {
     var n1 = n
     if (digitNumber(n) == 1) return false
     for (i in 1 until digitNumber(n)) {
-        if (n1 % 10 != n1 / 10 % 10) digits += 1
+        if (n1 % 10 != n1 / 10 % 10) return true
         n1 /= 10
     }
-    return digits != 1
+    return false
 }
 
 /**
@@ -288,7 +288,7 @@ fun hasDifferentDigits(n: Int): Boolean {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int {
+fun digit(n: Int, func: (n: Int) -> Int): Int {
     var seq = 1
     var n1 = 1
     var dgtN = 1
@@ -296,17 +296,19 @@ fun squareSequenceDigit(n: Int): Int {
     val number: Int
     while (dgtN < n) {
         n1 += 1
-        seq = sqr(n1)
+        seq = func(n1)
         dgtSeq = digitNumber(seq)
         dgtN += digitNumber(seq)
     }
     number = n - (dgtN - dgtSeq)
     while (dgtSeq != number) {
         seq /= 10
-        dgtSeq = digitNumber(seq)
+        dgtSeq -= 1
     }
     return seq % 10
 }
+
+fun squareSequenceDigit(n: Int): Int = digit(n, ::sqr)
 
 /**
  * Сложная
@@ -317,22 +319,4 @@ fun squareSequenceDigit(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int {
-    var seq = 1
-    var n1 = 1
-    var dgtN = 1
-    var dgtSeq = 1
-    val number: Int
-    while (dgtN < n) {
-        n1 += 1
-        seq = fib(n1)
-        dgtSeq = digitNumber(seq)
-        dgtN += digitNumber(seq)
-    }
-    number = n - (dgtN - dgtSeq)
-    while (dgtSeq != number) {
-        seq /= 10
-        dgtSeq = digitNumber(seq)
-    }
-    return seq % 10
-}
+fun fibSequenceDigit(n: Int): Int = digit(n, ::fib)
