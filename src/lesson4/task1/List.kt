@@ -265,7 +265,7 @@ fun convert(n: Int, base: Int): List<Int> {
  * (например, n.toString(base) и подобные), запрещается.
  */
 fun convertToString(n: Int, base: Int): String {
-    val letter: List<String> = listOf<String>(
+    val letter: List<String> = listOf(
         "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l",
         "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
     )
@@ -304,7 +304,7 @@ fun decimalFromString(str: String, base: Int): Int {
     var el = ""
     var number = 0
     val str1 = str.reversed()
-    val letter = listOf<String>(
+    val letter = listOf(
         "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l",
         "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
     )
