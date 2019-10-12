@@ -146,7 +146,7 @@ fun mean(list: List<Double>): Double {
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
     if (list.isEmpty()) return list
-    var average = mean(list)
+    val average = mean(list)
     for (i in 0 until list.size) list[i] -= average
     return list
 }
@@ -213,7 +213,7 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> {
  */
 fun factorize(n: Int): List<Int> {
     if (isPrime(n)) return listOf(n)
-    var result = mutableListOf<Int>()
+    val result = mutableListOf<Int>()
     var n1 = n
     var number = 2
     do {
@@ -243,7 +243,7 @@ fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
 fun convert(n: Int, base: Int): List<Int> {
-    var result = mutableListOf<Int>()
+    val result = mutableListOf<Int>()
     var n1 = n
     do {
         result.add(0, n1 % base)
@@ -265,7 +265,7 @@ fun convert(n: Int, base: Int): List<Int> {
  * (например, n.toString(base) и подобные), запрещается.
  */
 fun convertToString(n: Int, base: Int): String {
-    var letter = listOf<String>(
+    val letter: List<String> = listOf<String>(
         "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l",
         "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
     )
@@ -280,7 +280,7 @@ fun convertToString(n: Int, base: Int): String {
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
 fun decimal(digits: List<Int>, base: Int): Int {
-    var rev = digits.reversed()
+    val rev = digits.reversed()
     var count = 0
     for (i in 0 until rev.size) {
         count += rev[i] * base.toDouble().pow(i).toInt()
@@ -303,10 +303,11 @@ fun decimal(digits: List<Int>, base: Int): Int {
 fun decimalFromString(str: String, base: Int): Int {
     var el = ""
     var number = 0
-    var str1 = str.reversed()
-    var letter = listOf<String>(
+    val str1 = str.reversed()
+    val letter = listOf<String>(
         "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l",
-        "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z")
+        "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
+    )
     for (i in 0 until str1.length) {
         el = str1[i].toString()
         for (j in 0 until letter.size) if (el == letter[j]) el = (j + 10).toString()
