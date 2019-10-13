@@ -208,7 +208,6 @@ fun sin(x: Double, eps: Double): Double {
         el = abs(el) * x1 * x1 / (n * (n - 1))
         el *= otr
     }
-    sinx += el
     return sinx
 }
 
@@ -234,7 +233,6 @@ fun cos(x: Double, eps: Double): Double {
         el = abs(el) * x1 * x1 / (n * (n - 1))
         el *= otr
     }
-    cosx += el
     return cosx
 }
 

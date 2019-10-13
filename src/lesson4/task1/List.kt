@@ -211,6 +211,7 @@ fun factorize(n: Int): List<Int> {
     val result = mutableListOf<Int>()
     var n1 = n
     var number = 2
+    if (isPrime(n)) return listOf(n)
     do {
         if ((n1 % number == 0) && isPrime(number)) {
             result.add(number)
