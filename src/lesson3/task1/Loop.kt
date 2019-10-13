@@ -197,10 +197,10 @@ fun collatzSteps(x: Int): Int {
  */
 fun sin(x: Double, eps: Double): Double {
     val x1 = x % (2 * PI)
-    var n = 1
+    var n = 0
     var otr = 1
     var sinx = 0.0
-    var el = x1 * otr
+    var el = x1
     while (abs(el) >= eps) {
         sinx += el
         n += 2
