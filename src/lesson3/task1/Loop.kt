@@ -198,14 +198,17 @@ fun collatzSteps(x: Int): Int {
 fun sin(x: Double, eps: Double): Double {
     val x1 = x % (2 * PI)
     var n = 1
+    var otr = 1
     var sinx = 0.0
-    var el : Double
-    while (abs(x1.pow(n) / factorial(n)) >= eps) {
-        el = x1.pow(n) / factorial(n)
-        if ((n / 2) % 2 == 1) el *= (-1)
-        n += 2
+    var el = x1 * otr
+    while (abs(el) >= eps) {
         sinx += el
+        n += 2
+        otr *= -1
+        el = abs(el) * x1 * x1 / (n * (n - 1))
+        el *= otr
     }
+    sinx += el
     return sinx
 }
 
@@ -221,14 +224,17 @@ fun sin(x: Double, eps: Double): Double {
 fun cos(x: Double, eps: Double): Double {
     val x1 = x % (2 * PI)
     var n = 0
+    var otr = 1
     var cosx = 0.0
-    var el: Double
-    while (abs(x1.pow(n) / factorial(n)) >= eps) {
-        el = x1.pow(n) / (factorial(n))
-        if ((n / 2) % 2 == 1) el *= (-1)
+    var el = 1.0
+    while (abs(el) >= eps) {
         cosx += el
         n += 2
+        otr *= -1
+        el = abs(el) * x1 * x1 / (n * (n - 1))
+        el *= otr
     }
+    cosx += el
     return cosx
 }
 
@@ -269,9 +275,7 @@ fun isPalindrome(n: Int) = n == revert(n)
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun hasDifferentDigits(n: Int): Boolean {
-    var digits = 1
     var n1 = n
-    if (digitNumber(n) == 1) return false
     for (i in 1 until digitNumber(n)) {
         if (n1 % 10 != n1 / 10 % 10) return true
         n1 /= 10
@@ -301,10 +305,7 @@ fun digit(n: Int, func: (n: Int) -> Int): Int {
         dgtN += digitNumber(seq)
     }
     number = n - (dgtN - dgtSeq)
-    while (dgtSeq != number) {
-        seq /= 10
-        dgtSeq -= 1
-    }
+    seq /= 10.0.pow(dgtN - n).toInt()
     return seq % 10
 }
 
