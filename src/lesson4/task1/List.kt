@@ -273,7 +273,7 @@ fun convertToString(n: Int, base: Int): String {
 fun decimal(digits: List<Int>, base: Int): Int {
     var count = 0
     var dgr = 1
-    for (i in (digits.size - 1) downTo  0) {
+    for (i in (digits.size - 1) downTo 0) {
         count += digits[i] * dgr
         dgr *= base
     }
