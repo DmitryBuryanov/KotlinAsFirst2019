@@ -211,14 +211,13 @@ fun factorize(n: Int): List<Int> {
     val result = mutableListOf<Int>()
     var n1 = n
     var number = 2
-    if (isPrime(n)) return listOf(n)
-    do {
-        if ((n1 % number == 0) && isPrime(number)) {
+    while (n1 != 1) {
+        while (n1 % number == 0) {
             result.add(number)
             n1 /= number
-        } else number += 1
-    } while (!isPrime(n1))
-    result.add(n1)
+        }
+        number += 1
+    }
     return result
 }
 
