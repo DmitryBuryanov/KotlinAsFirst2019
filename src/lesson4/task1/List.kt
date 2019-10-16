@@ -172,11 +172,11 @@ fun times(a: List<Int>, b: List<Int>): Int {
  * Значение пустого многочлена равно 0 при любом x.
  */
 fun polynom(p: List<Int>, x: Int): Int {
-    var count = 0
     var px = 0
+    var x1 = 1
     for (i in 0 until p.size) {
-        px += p[i] * x.toDouble().pow(count).toInt()
-        count += 1
+        px += p[i] * x1
+        x1 *= x
     }
     return px
 }
@@ -261,11 +261,7 @@ fun convert(n: Int, base: Int): List<Int> {
  * (например, n.toString(base) и подобные), запрещается.
  */
 fun convertToString(n: Int, base: Int): String {
-    val letter: List<String> = listOf(
-        "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l",
-        "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
-    )
-    return convert(n, base).joinToString(separator = "") { if (it < 10) "$it" else letter[it - 10] }
+    return convert(n, base).joinToString(separator = "") { if (it < 10) "$it" else (it + 87).toChar().toString() }
 }
 
 /**
@@ -276,10 +272,11 @@ fun convertToString(n: Int, base: Int): String {
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
 fun decimal(digits: List<Int>, base: Int): Int {
-    val rev = digits.reversed()
     var count = 0
-    for (i in 0 until rev.size) {
-        count += rev[i] * base.toDouble().pow(i).toInt()
+    var dgr = 1
+    for (i in (digits.size - 1) downTo  0) {
+        count += digits[i] * dgr
+        dgr *= base
     }
     return count
 }
@@ -297,17 +294,13 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * (например, str.toInt(base)), запрещается.
  */
 fun decimalFromString(str: String, base: Int): Int {
-    var el = ""
+    var el: String
     var number = 0
-    val str1 = str.reversed()
-    val letter = listOf(
-        "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l",
-        "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
-    )
-    for (i in 0 until str1.length) {
-        el = str1[i].toString()
-        for (j in 0 until letter.size) if (el == letter[j]) el = (j + 10).toString()
-        number += el.toInt() * base.toDouble().pow(i).toInt()
+    var dgr = 1
+    for (i in str.length - 1 downTo 0) {
+        el = if (str[i].toInt() < 97) str[i].toString() else (str[i].toInt() - 87).toString()
+        number += el.toInt() * dgr
+        dgr *= base
     }
     return number
 }

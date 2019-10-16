@@ -198,15 +198,14 @@ fun collatzSteps(x: Int): Int {
 fun sin(x: Double, eps: Double): Double {
     val x1 = x % (2 * PI)
     var n = 1
-    var otr = 1
+    var count = 0
     var sinx = 0.0
     var el = x1
     while (abs(el) >= eps) {
-        sinx += el
+        sinx += el * (-1.0).pow(count)
         n += 2
-        otr *= -1
-        el = abs(el) * x1 * x1 / (n * (n - 1))
-        el *= otr
+        count += 1
+        el *= x1.pow(2) / ((n - 1) * n)
     }
     return sinx
 }
@@ -223,15 +222,14 @@ fun sin(x: Double, eps: Double): Double {
 fun cos(x: Double, eps: Double): Double {
     val x1 = x % (2 * PI)
     var n = 0
-    var otr = 1
+    var count = 0
     var cosx = 0.0
     var el = 1.0
     while (abs(el) >= eps) {
-        cosx += el
+        cosx += el * (-1.0).pow(count)
         n += 2
-        otr *= -1
-        el = abs(el) * x1 * x1 / (n * (n - 1))
-        el *= otr
+        count += 1
+        el *= x1 * x1 / (n * (n - 1))
     }
     return cosx
 }
@@ -302,7 +300,6 @@ fun digit(n: Int, func: (n: Int) -> Int): Int {
         dgtSeq = digitNumber(seq)
         dgtN += digitNumber(seq)
     }
-    number = n - (dgtN - dgtSeq)
     seq /= 10.0.pow(dgtN - n).toInt()
     return seq % 10
 }
