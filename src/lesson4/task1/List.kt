@@ -358,23 +358,8 @@ fun roman(n: Int): String {
  */
 fun units(n: Int): String {
     return when (n) {
-        1 -> "один"
-        2 -> "два"
-        3 -> "три"
-        4 -> "четыре"
-        5 -> "пять"
-        6 -> "шесть"
-        7 -> "семь"
-        8 -> "восемь"
-        9 -> "девять"
-        else -> ""
-    }
-}
-
-fun unitsforthous(n: Int): String {
-    return when (n) {
-        1 -> "одна "
-        2 -> "две "
+        1 -> "один "
+        2 -> "два "
         3 -> "три "
         4 -> "четыре "
         5 -> "пять "
@@ -382,7 +367,15 @@ fun unitsforthous(n: Int): String {
         7 -> "семь "
         8 -> "восемь "
         9 -> "девять "
-        else -> ""
+        else -> " "
+    }
+}
+
+fun unitsforthous(n: Int): String {
+    return when (n) {
+        1 -> "одна "
+        2 -> "две "
+        else -> units(n)
     }
 }
 
@@ -403,9 +396,9 @@ fun dozens(n: Int): String {
         2 -> "двадцать " + units(n % 10)
         3 -> "тридцать " + units(n % 10)
         4 -> "сорок " + units(n % 10)
-        in 5 .. 8 -> units(n / 10 % 10) + "десят " + units(n % 10)
+        in 5 .. 8 -> units(n / 10 % 10).trim() + "десят " + units(n % 10)
         9 -> "девяносто " + units(n % 10)
-        else  -> units(n % 10)
+        else  -> units(n % 10) + " "
     }
 }
 
@@ -421,12 +414,12 @@ fun dozensforthous(n: Int): String {
             7 -> "семнадцать "
             8 -> "восемнадцать "
             9 -> "девятнадцать "
-            else -> ""
+            else -> " "
         }
         2 -> "двадцать " + unitsforthous(n % 10)
         3 -> "тридцать " + unitsforthous(n % 10)
         4 -> "сорок " + unitsforthous(n % 10)
-        in 5 .. 8 -> unitsforthous(n / 10 % 10) + "десят " + units(n % 10)
+        in 5 .. 8 -> units(n / 10 % 10).trim() + "десят " + units(n % 10)
         9 -> "девяносто " + unitsforthous(n % 10)
         else  -> unitsforthous(n % 10)
     }
@@ -438,7 +431,7 @@ fun hund(n: Int): String {
         2 -> "двести " + dozens(n % 100)
         3 -> "триста " + dozens(n % 100)
         4 -> "четыреста " + dozens(n % 100)
-        in 5..9 -> units(n / 100 % 10) + "сот " + dozens(n % 100)
+        in 5..9 -> units(n / 100 % 10).trim() + "сот " + dozens(n % 100)
         else -> dozens(n % 100)
     }
 }
@@ -449,7 +442,7 @@ fun hundforthous(n: Int): String {
         2 -> "двести " + dozensforthous(n % 100)
         3 -> "триста " + dozensforthous(n % 100)
         4 -> "четыреста " + dozensforthous(n % 100)
-        in 5..9 -> units(n / 100 % 10) + "сот " + dozensforthous(n % 100)
+        in 5..9 -> units(n / 100 % 10).trim() + "сот " + dozensforthous(n % 100)
         else -> dozensforthous(n % 100)
     }
 }
@@ -470,4 +463,3 @@ fun russian(n: Int): String {
     return if (digitNumber(n) <= 3) hund(n)
     else (hundforthous(n / 1000) + thousands(n / 1000 % 100) + hund(n % 1000)).trim()
 }
-
