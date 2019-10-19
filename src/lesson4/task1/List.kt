@@ -404,7 +404,7 @@ fun dozens(n: Int): String {
         3 -> "тридцать " + units(n % 10)
         4 -> "сорок " + units(n % 10)
         in 5 .. 8 -> units(n / 10 % 10) + "десят " + units(n % 10)
-        4 -> "девяносто " + units(n % 10)
+        9 -> "девяносто " + units(n % 10)
         else  -> units(n % 10)
     }
 }
@@ -427,7 +427,7 @@ fun dozensforthous(n: Int): String {
         3 -> "тридцать " + unitsforthous(n % 10)
         4 -> "сорок " + unitsforthous(n % 10)
         in 5 .. 8 -> unitsforthous(n / 10 % 10) + "десят " + units(n % 10)
-        4 -> "девяносто " + unitsforthous(n % 10)
+        9 -> "девяносто " + unitsforthous(n % 10)
         else  -> unitsforthous(n % 10)
     }
 }
