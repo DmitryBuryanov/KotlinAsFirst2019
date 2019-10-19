@@ -312,7 +312,41 @@ fun decimalFromString(str: String, base: Int): Int {
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    var n1 = n
+    var s = ""
+    when {
+        (n1 % 10) in 1..3 -> for (i in 1 .. n1 % 10) s += "I"
+        (n1 % 10) == 4 -> s += "VI"
+        (n1 % 10) == 5 -> s += "V"
+        (n1 % 10) in 6..8 -> {for (i in 1 .. n1 % 10 - 5) s += "I"; s += "V"}
+        (n1 % 10) == 9 -> s += "XI"
+        else -> s += ""
+    }
+    n1 /= 10
+
+    when {
+        (n1 % 10) in 1..3 -> for (i in 1 .. n1 % 10) s += "X"
+        (n1 % 10) == 4 -> s += "LX"
+        (n1 % 10) == 5 -> s += "L"
+        (n1 % 10) in 6..8 -> {for (i in 1 .. n1 % 10 - 5) s += "X"; s += "L"}
+        (n1 % 10) == 9 -> s += "CX"
+        else -> s += ""
+    }
+    n1 /= 10
+
+    when {
+        (n1 % 10) in 1..3 -> for (i in 1 .. n1 % 10) s += "C"
+        (n1 % 10) == 4 -> s += "DC"
+        (n1 % 10) == 5 -> s += "D"
+        (n1 % 10) in 6..8 -> {for (i in 1 .. n1 % 10 - 5) s += "C"; s += "D"}
+        (n1 % 10) == 9 -> s += "MC"
+        else -> s += ""
+    }
+    n1 /= 10
+    for (i in 1 .. n1) s += "M"
+    return s.reversed()
+}
 
 /**
  * Очень сложная
