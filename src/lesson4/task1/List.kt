@@ -460,6 +460,6 @@ fun thousands(n: Int): String {
 }
 
 fun russian(n: Int): String {
-    return if (digitNumber(n) <= 3) hund(n)
+    return if (digitNumber(n) <= 3) hund(n).trim()
     else (hundforthous(n / 1000) + thousands(n / 1000 % 100) + hund(n % 1000)).trim()
 }
