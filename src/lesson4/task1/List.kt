@@ -367,7 +367,7 @@ fun units(n: Int): String {
         7 -> "семь "
         8 -> "восемь "
         9 -> "девять "
-        else -> " "
+        else -> ""
     }
 }
 
@@ -398,7 +398,7 @@ fun dozens(n: Int): String {
         4 -> "сорок " + units(n % 10)
         in 5 .. 8 -> units(n / 10 % 10).trim() + "десят " + units(n % 10)
         9 -> "девяносто " + units(n % 10)
-        else  -> units(n % 10) + " "
+        else  -> units(n % 10)
     }
 }
 
