@@ -419,7 +419,7 @@ fun dozensforthous(n: Int): String {
         2 -> "двадцать " + unitsforthous(n % 10)
         3 -> "тридцать " + unitsforthous(n % 10)
         4 -> "сорок " + unitsforthous(n % 10)
-        in 5 .. 8 -> units(n / 10 % 10).trim() + "десят " + units(n % 10)
+        in 5 .. 8 -> units(n / 10 % 10).trim() + "десят " + unitsforthous(n % 10)
         9 -> "девяносто " + unitsforthous(n % 10)
         else  -> unitsforthous(n % 10)
     }
