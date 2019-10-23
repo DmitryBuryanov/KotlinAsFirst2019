@@ -314,45 +314,26 @@ fun decimalFromString(str: String, base: Int): Int {
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
+    val arab = listOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
+    val rom = listOf(
+        "I", "IV", "V", "IX", "X", "XL", "L",
+        "XC", "C", "CD", "D", "CM", "M"
+    )
+    var result = ""
     var n1 = n
-    var s = ""
-    when {
-        (n1 % 10) in 1..3 -> for (i in 1..n1 % 10) s += "I"
-        (n1 % 10) == 4 -> s += "VI"
-        (n1 % 10) == 5 -> s += "V"
-        (n1 % 10) in 6..8 -> {
-            for (i in 1..n1 % 10 - 5) s += "I"; s += "V"
+    while (n1 > 0) {
+        for (i in arab.size - 1 downTo 0) {
+            while (n1 >= arab[arab.size - 1]) {
+                n1 -= arab[arab.size - 1]
+                result += rom[arab.size - 1]
+            }
+            while (arab[i] <= n1) {
+                n1 -= arab[i]
+                result += rom[i]
+            }
         }
-        (n1 % 10) == 9 -> s += "XI"
-        else -> s += ""
     }
-    n1 /= 10
-
-    when {
-        (n1 % 10) in 1..3 -> for (i in 1..n1 % 10) s += "X"
-        (n1 % 10) == 4 -> s += "LX"
-        (n1 % 10) == 5 -> s += "L"
-        (n1 % 10) in 6..8 -> {
-            for (i in 1..n1 % 10 - 5) s += "X"; s += "L"
-        }
-        (n1 % 10) == 9 -> s += "CX"
-        else -> s += ""
-    }
-    n1 /= 10
-
-    when {
-        (n1 % 10) in 1..3 -> for (i in 1..n1 % 10) s += "C"
-        (n1 % 10) == 4 -> s += "DC"
-        (n1 % 10) == 5 -> s += "D"
-        (n1 % 10) in 6..8 -> {
-            for (i in 1..n1 % 10 - 5) s += "C"; s += "D"
-        }
-        (n1 % 10) == 9 -> s += "MC"
-        else -> s += ""
-    }
-    n1 /= 10
-    for (i in 1..n1) s += "M"
-    return s.reversed()
+    return result
 }
 
 /**
