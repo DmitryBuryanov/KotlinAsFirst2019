@@ -317,35 +317,41 @@ fun roman(n: Int): String {
     var n1 = n
     var s = ""
     when {
-        (n1 % 10) in 1..3 -> for (i in 1 .. n1 % 10) s += "I"
+        (n1 % 10) in 1..3 -> for (i in 1..n1 % 10) s += "I"
         (n1 % 10) == 4 -> s += "VI"
         (n1 % 10) == 5 -> s += "V"
-        (n1 % 10) in 6..8 -> {for (i in 1 .. n1 % 10 - 5) s += "I"; s += "V"}
+        (n1 % 10) in 6..8 -> {
+            for (i in 1..n1 % 10 - 5) s += "I"; s += "V"
+        }
         (n1 % 10) == 9 -> s += "XI"
         else -> s += ""
     }
     n1 /= 10
 
     when {
-        (n1 % 10) in 1..3 -> for (i in 1 .. n1 % 10) s += "X"
+        (n1 % 10) in 1..3 -> for (i in 1..n1 % 10) s += "X"
         (n1 % 10) == 4 -> s += "LX"
         (n1 % 10) == 5 -> s += "L"
-        (n1 % 10) in 6..8 -> {for (i in 1 .. n1 % 10 - 5) s += "X"; s += "L"}
+        (n1 % 10) in 6..8 -> {
+            for (i in 1..n1 % 10 - 5) s += "X"; s += "L"
+        }
         (n1 % 10) == 9 -> s += "CX"
         else -> s += ""
     }
     n1 /= 10
 
     when {
-        (n1 % 10) in 1..3 -> for (i in 1 .. n1 % 10) s += "C"
+        (n1 % 10) in 1..3 -> for (i in 1..n1 % 10) s += "C"
         (n1 % 10) == 4 -> s += "DC"
         (n1 % 10) == 5 -> s += "D"
-        (n1 % 10) in 6..8 -> {for (i in 1 .. n1 % 10 - 5) s += "C"; s += "D"}
+        (n1 % 10) in 6..8 -> {
+            for (i in 1..n1 % 10 - 5) s += "C"; s += "D"
+        }
         (n1 % 10) == 9 -> s += "MC"
         else -> s += ""
     }
     n1 /= 10
-    for (i in 1 .. n1) s += "M"
+    for (i in 1..n1) s += "M"
     return s.reversed()
 }
 
@@ -396,9 +402,9 @@ fun dozens(n: Int): String {
         2 -> "двадцать " + units(n % 10)
         3 -> "тридцать " + units(n % 10)
         4 -> "сорок " + units(n % 10)
-        in 5 .. 8 -> units(n / 10 % 10).trim() + "десят " + units(n % 10)
+        in 5..8 -> units(n / 10 % 10).trim() + "десят " + units(n % 10)
         9 -> "девяносто " + units(n % 10)
-        else  -> units(n % 10)
+        else -> units(n % 10)
     }
 }
 
@@ -419,9 +425,9 @@ fun dozensforthous(n: Int): String {
         2 -> "двадцать " + unitsforthous(n % 10)
         3 -> "тридцать " + unitsforthous(n % 10)
         4 -> "сорок " + unitsforthous(n % 10)
-        in 5 .. 8 -> units(n / 10 % 10).trim() + "десят " + unitsforthous(n % 10)
+        in 5..8 -> units(n / 10 % 10).trim() + "десят " + unitsforthous(n % 10)
         9 -> "девяносто " + unitsforthous(n % 10)
-        else  -> unitsforthous(n % 10)
+        else -> unitsforthous(n % 10)
     }
 }
 
@@ -450,10 +456,10 @@ fun hundforthous(n: Int): String {
 fun thousands(n: Int): String {
     return when (n / 10 % 10) {
         1 -> "тысяч "
-        else  -> when (n % 10) {
+        else -> when (n % 10) {
             1 -> "тысяча "
-            in 2 .. 4 -> "тысячи "
-            in 5 .. 9 -> "тысяч "
+            in 2..4 -> "тысячи "
+            in 5..9 -> "тысяч "
             else -> "тысяч "
         }
     }
