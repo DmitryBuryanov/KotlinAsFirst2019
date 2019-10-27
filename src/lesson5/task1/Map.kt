@@ -266,9 +266,7 @@ fun extractRepeats(list: List1<String>): Map<String, Int> {
         result[element] = result.getOrDefault(element, 0) + 1
     }
     var removes = mutableListOf<String>()
-    for ((key, value) in result) {
-        if (value == 1) removes.add(key)
-    }
+    for ((key, value) in result) if (value == 1) removes.add(key)
     return result - removes
 }
 
