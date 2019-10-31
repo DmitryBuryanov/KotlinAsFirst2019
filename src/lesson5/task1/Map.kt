@@ -268,7 +268,7 @@ fun hasAnagrams(words: List<String>): Boolean {
     for (word in words) if (word != "") x.add(word.toSet())
     for (i in 0 until x.size) {
         for (j in 1 until x.size) {
-            if ((x[i] == x[j]) && (i != j)) return true
+            if ((x[i] == x[j]) && (j != i)) return true
         }
     }
     return false
