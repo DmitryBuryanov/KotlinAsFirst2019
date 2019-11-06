@@ -69,7 +69,26 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun dateStrToDigit(str: String): String {
+    val x = listOf<String>(
+        "января", "февраля", "марта", "апреля", "мая", "июня", "июля",
+        "августа", "сентября", "октября", "ноября", "декабря"
+    )
+    val parts = str.split(" ")
+    if (parts.size != 3) return ""
+    val date = parts[0].toInt()
+    var month = parts[1]
+    val year = parts[2].toInt()
+    for (i in 0 until x.size) if (month == x[i]) month = (i + 1).toString()
+    if (month == parts[1]) return ""
+    return when {
+        ((month == "1") || (month == "3") || (month == "5") || (month == "7") || (month == "8") ||
+                (month == "10") || (month == "12")) && (date > 31) -> ""
+        ((month == "4") || (month == "6") || (month == "9") || (month == "11")) && (date > 30) -> ""
+        ((month == "2") && (date > 28)) -> ""
+        else -> "${twoDigitStr(date)}.${twoDigitStr(month.toInt())}.${twoDigitStr(year)}"
+    }
+}
 
 /**
  * Средняя
@@ -81,7 +100,25 @@ fun dateStrToDigit(str: String): String = TODO()
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    val dateInMonths = mapOf<String, String>("января" to "01", "февраля" to "02",
+        "марта" to "03", "апреля" to "04", "мая" to "05", "июня" to "06", "июля" to "07", "августа" to "08",
+        "сентября" to "09", "октября" to "10", "ноября" to "11", "декабря" to "12")
+    val parts = digital.split(".")
+    if (parts.size != 3) return ""
+    val date = parts[0]
+    var month = parts[1]
+    for ((names, dates) in dateInMonths) if (month == dates) month = names
+    if (month == parts[1]) return ""
+    val year = parts[2]
+    return when {
+        ((month == "января") || (month == "марта") || (month == "мая") || (month == "июля") || (month == "августа") ||
+                (month == "октября") || (month == "декабря")) && (date.toInt() > 31) -> ""
+        ((month == "апреля") || (month == "июня") || (month == "сентября") || (month == "ноября")) && (date.toInt() > 30) -> ""
+        ((month == "февраля") && (date.toInt() > 28)) -> ""
+        else -> "${date.toInt()} " +  month + " ${year.toInt()}"
+    }
+}
 
 /**
  * Средняя
