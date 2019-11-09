@@ -91,6 +91,7 @@ fun dateStrToDigit(str: String): String {
         ((month == "2") && (year.toInt() % 400 == 0 ||
                 (year % 100 != 0 && year % 4 == 0)) && (date > 29)) -> ""
         ((month == "2") && (year % 4 != 0 || year % 100 == 0) && (date > 28)) -> ""
+        year == 0 || date == 0 -> ""
         else -> "${twoDigitStr(date)}.${twoDigitStr(month.toInt())}.$year"
     }
 }
@@ -125,6 +126,7 @@ fun dateDigitToStr(digital: String): String {
         ((month == "февраля") && (year.toInt() % 400 == 0 ||
                 (year.toInt() % 100 != 0 && year.toInt() % 4 == 0)) && (date.toInt() > 29)) -> ""
         ((month == "февраля") && (year.toInt() % 4 != 0 || year.toInt() % 100 == 0) && (date.toInt() > 28)) -> ""
+        year.toInt() == 0 || date.toInt() == 0 -> ""
         else -> "${date.toInt()} " + month + " ${year.toInt()}"
     }
 }
