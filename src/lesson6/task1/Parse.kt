@@ -88,7 +88,9 @@ fun dateStrToDigit(str: String): String {
         ((month == "1") || (month == "3") || (month == "5") || (month == "7") || (month == "8") ||
                 (month == "10") || (month == "12")) && (date > 31) -> ""
         ((month == "4") || (month == "6") || (month == "9") || (month == "11")) && (date > 30) -> ""
-        ((month == "2") && (date > 28)) -> ""
+        ((month == "2") && (year.toInt() % 400 == 0 ||
+                (year % 100 != 0 && year % 4 == 0)) && (date > 29)) -> ""
+        ((month == "2") && (year % 4 != 0 || year % 100 == 0) && (date > 28)) -> ""
         else -> "${twoDigitStr(date)}.${twoDigitStr(month.toInt())}.$year"
     }
 }
@@ -120,8 +122,9 @@ fun dateDigitToStr(digital: String): String {
         ((month == "января") || (month == "марта") || (month == "мая") || (month == "июля") || (month == "августа") ||
                 (month == "октября") || (month == "декабря")) && (date.toInt() > 31) -> ""
         ((month == "апреля") || (month == "июня") || (month == "сентября") || (month == "ноября")) && (date.toInt() > 30) -> ""
-        ((month == "февраля") && (year.toInt() % 4 == 0) && (date.toInt() > 29)) -> ""
-        ((month == "февраля") && (year.toInt() % 4 != 0) && (date.toInt() > 28)) -> ""
+        ((month == "февраля") && (year.toInt() % 400 == 0 ||
+                (year.toInt() % 100 != 0 && year.toInt() % 4 == 0)) && (date.toInt() > 29)) -> ""
+        ((month == "февраля") && (year.toInt() % 4 != 0 || year.toInt() % 100 == 0) && (date.toInt() > 28)) -> ""
         else -> "${date.toInt()} " + month + " ${year.toInt()}"
     }
 }
@@ -219,8 +222,9 @@ fun plusMinus(expression: String): Int {
     for (chars in str) x.add(chars)
     val y = listOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-", "+", " ")
     val parts = expression.split(" ")
-    if (parts[0].startsWith("+") || parts[0].startsWith("-") || parts.size == 0) throw IllegalArgumentException()
-    var result = parts[0].toInt()
+    if (parts[0].startsWith("+") || parts[0].startsWith("-")) throw IllegalArgumentException()
+    var result = 0
+    if (parts[0].toIntOrNull() == null) throw IllegalArgumentException() else result = parts[0].toInt()
     for (i in 1 until parts.size) {
         if (i % 2 == 1) {
             if (parts[i] == "+") n = 1
