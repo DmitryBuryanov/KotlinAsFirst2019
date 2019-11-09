@@ -89,7 +89,7 @@ fun dateStrToDigit(str: String): String {
                 (month == "10") || (month == "12")) && (date > 31) -> ""
         ((month == "4") || (month == "6") || (month == "9") || (month == "11")) && (date > 30) -> ""
         ((month == "2") && (date > 28)) -> ""
-        else -> "${twoDigitStr(date)}.${twoDigitStr(month.toInt())}.${twoDigitStr(year)}"
+        else -> "${twoDigitStr(date)}.${twoDigitStr(month.toInt())}.$year"
     }
 }
 
@@ -120,7 +120,8 @@ fun dateDigitToStr(digital: String): String {
         ((month == "января") || (month == "марта") || (month == "мая") || (month == "июля") || (month == "августа") ||
                 (month == "октября") || (month == "декабря")) && (date.toInt() > 31) -> ""
         ((month == "апреля") || (month == "июня") || (month == "сентября") || (month == "ноября")) && (date.toInt() > 30) -> ""
-        ((month == "февраля") && (date.toInt() > 28)) -> ""
+        ((month == "февраля") && (year.toInt() % 4 == 0) && (date.toInt() > 29)) -> ""
+        ((month == "февраля") && (year.toInt() % 4 != 0) && (date.toInt() > 28)) -> ""
         else -> "${date.toInt()} " + month + " ${year.toInt()}"
     }
 }
@@ -162,6 +163,7 @@ fun flattenPhoneNumber(phone: String): String {
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
 fun bestLongJump(jumps: String): Int {
+    if (jumps == "") return -1
     var result = Int.MIN_VALUE
     val x = mutableSetOf<Char>()
     val str = "0123456789"
@@ -217,7 +219,7 @@ fun plusMinus(expression: String): Int {
     for (chars in str) x.add(chars)
     val y = listOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-", "+", " ")
     val parts = expression.split(" ")
-    if (parts[0].startsWith("+") || parts[0].startsWith("-")) throw IllegalArgumentException()
+    if (parts[0].startsWith("+") || parts[0].startsWith("-") || parts.size == 0) throw IllegalArgumentException()
     var result = parts[0].toInt()
     for (i in 1 until parts.size) {
         if (i % 2 == 1) {
@@ -243,7 +245,10 @@ fun firstDuplicateIndex(str: String): Int {
     var word = ""
     val parts = str.split(" ")
     for (i in 0 until parts.size - 1) {
-        if (parts[i].toLowerCase() == parts[i + 1].toLowerCase()) word = parts[i] + " " + parts[i + 1]
+        if (parts[i].toLowerCase() == parts[i + 1].toLowerCase()) {
+            word = parts[i] + " " + parts[i + 1]
+            break
+        }
     }
     return if (word == "") -1 else str.indexOf(word)
 }
@@ -261,7 +266,7 @@ fun firstDuplicateIndex(str: String): Int {
  */
 fun mostExpensive(description: String): String {
     var result = ""
-    var max1 = Double.MIN_VALUE
+    var max1 = Int.MIN_VALUE.toDouble()
     val parts = description.split("; ")
     val products = mutableMapOf<String, Double>()
     for (part in parts) {
@@ -291,6 +296,7 @@ fun mostExpensive(description: String): String {
  * Вернуть -1, если roman не является корректным римским числом
  */
 fun fromRoman(roman: String): Int {
+    if (roman == "") return -1
     var roman1 = roman
     val arab = listOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
     val rom = listOf(
@@ -369,7 +375,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
             "]" -> if (list[ind] != 0) i = openbracketsInd(commands, i)
             else -> throw IllegalArgumentException()
         }
-        if (ind > list.size - 1) throw IllegalStateException()
+        if ((ind > list.size - 1) || (ind < 0)) throw IllegalStateException()
         checklimit += 1
         i += 1
     }
