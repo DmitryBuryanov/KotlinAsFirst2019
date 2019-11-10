@@ -46,8 +46,21 @@ fun timeSecondsToStr(seconds: Int): String {
 /**
  * Пример: консольный ввод
  */
-//fun main() {
-//}
+fun main() {
+    println("Введите время в формате ЧЧ:ММ:СС")
+    val line = readLine()
+    if (line != null) {
+        val seconds = timeStrToSeconds(line)
+        if (seconds == -1) {
+            println("Введённая строка $line не соответствует формату ЧЧ:ММ:СС")
+        } else {
+            println("Прошло секунд с начала суток: $seconds")
+        }
+    } else {
+        println("Достигнут <конец файла> в процессе чтения строки. Программа прервана")
+    }
+}
+
 /**
  * Средняя
  *
@@ -64,11 +77,13 @@ fun dateStrToDigit(str: String): String {
         "января", "февраля", "марта", "апреля", "мая", "июня", "июля",
         "августа", "сентября", "октября", "ноября", "декабря"
     )
+    var date = 0
+    var year = 0
     val parts = str.split(" ")
     if (parts.size != 3) return ""
-    val date = parts[0].toInt()
+    if (parts[0].toIntOrNull() == null) return "" else date = parts[0].toInt()
     var month = parts[1]
-    val year = parts[2].toInt()
+    if (parts[2].toIntOrNull() == null) return "" else year = parts[2].toInt()
     for (i in 0 until x.size) if (month == x[i]) month = (i + 1).toString()
     if (month == parts[1]) return ""
     return when {
@@ -99,13 +114,15 @@ fun dateDigitToStr(digital: String): String {
         "марта" to "03", "апреля" to "04", "мая" to "05", "июня" to "06", "июля" to "07", "августа" to "08",
         "сентября" to "09", "октября" to "10", "ноября" to "11", "декабря" to "12"
     )
+    var date = ""
+    var year = ""
     val parts = digital.split(".")
     if (parts.size != 3) return ""
-    val date = parts[0]
+    if (parts[0].toIntOrNull() == null) return "" else date = parts[0]
     var month = parts[1]
     for ((names, dates) in dateInMonths) if (month == dates) month = names
     if (month == parts[1]) return ""
-    val year = parts[2]
+    if (parts[2].toIntOrNull() == null) return "" else year = parts[2]
     return when {
         ((month == "января") || (month == "марта") || (month == "мая") || (month == "июля") ||
                 (month == "августа") || (month == "октября") || (month == "декабря")) && (date.toInt() > 31) -> ""
@@ -119,11 +136,6 @@ fun dateDigitToStr(digital: String): String {
         else -> "${date.toInt()} " + month + " ${year.toInt()}"
     }
 }
-
-fun main() {
-    println(dateDigitToStr("29.02.8758800"))
-}
-
 
 /**
  * Средняя
@@ -218,9 +230,10 @@ fun plusMinus(expression: String): Int {
     for (chars in str) x.add(chars)
     val y = listOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-", "+", " ")
     val parts = expression.split(" ")
-    if (parts[0].startsWith("+") || parts[0].startsWith("-")) throw IllegalArgumentException()
+    require(!(parts[0].startsWith("+") || parts[0].startsWith("-")))
     var result = 0
-    if (parts[0].toIntOrNull() == null) throw IllegalArgumentException() else result = parts[0].toInt()
+    requireNotNull(parts[0].toIntOrNull())
+    result = parts[0].toInt()
     for (i in 1 until parts.size) {
         if (i % 2 == 1) {
             if (parts[i] == "+") n = 1
@@ -304,8 +317,8 @@ fun fromRoman(roman: String): Int {
         "XC", "C", "CD", "D", "CM", "M"
     )
     var result = 0
-    for (i in 0 until rom.size) {
-        while ((roman1.endsWith(rom[i])) && (roman1.length > 0)) {
+    for (i in rom.indices) {
+        while ((roman1.endsWith(rom[i])) && (roman1.isNotEmpty())) {
             result += arab[i]
             roman1 = roman1.substring(0, roman1.length - rom[i].length)
         }
@@ -358,7 +371,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     var i = 0
     for (i in 0 until cells) list.add(0)
     val simbols = listOf(">", "<", "+", "-", " ", "[", "]")
-    for (i in 0 until commands.length) {
+    for (i in commands.indices) {
         if (commands[i].toString() !in simbols) throw IllegalArgumentException()
         if (commands[i].toString() == "[") sk1 += 1
         if (commands[i].toString() == "]") sk2 += 1
