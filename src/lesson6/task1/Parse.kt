@@ -46,21 +46,8 @@ fun timeSecondsToStr(seconds: Int): String {
 /**
  * Пример: консольный ввод
  */
-fun main() {
-    println("Введите время в формате ЧЧ:ММ:СС")
-    val line = readLine()
-    if (line != null) {
-        val seconds = timeStrToSeconds(line)
-        if (seconds == -1) {
-            println("Введённая строка $line не соответствует формату ЧЧ:ММ:СС")
-        } else {
-            println("Прошло секунд с начала суток: $seconds")
-        }
-    } else {
-        println("Достигнут <конец файла> в процессе чтения строки. Программа прервана")
-    }
-}
-
+//fun main() {
+//}
 /**
  * Средняя
  *
@@ -88,10 +75,10 @@ fun dateStrToDigit(str: String): String {
         ((month == "1") || (month == "3") || (month == "5") || (month == "7") || (month == "8") ||
                 (month == "10") || (month == "12")) && (date > 31) -> ""
         ((month == "4") || (month == "6") || (month == "9") || (month == "11")) && (date > 30) -> ""
-        ((month == "2") && (year.toInt() % 400 == 0 ||
+        ((month == "2") && (year % 400 == 0 ||
                 (year % 100 != 0 && year % 4 == 0)) && (date > 29)) -> ""
-        ((month == "2") && (year % 4 != 0 || year % 100 == 0) && (date > 28)) -> ""
-        year == 0 || date == 0 -> ""
+        ((month == "2") && (year % 400 != 0) && (year % 4 != 0 || year % 100 == 0) && (year != 0) && (date > 28)) -> ""
+        date == 0 -> ""
         else -> "${twoDigitStr(date)}.${twoDigitStr(month.toInt())}.$year"
     }
 }
@@ -120,16 +107,23 @@ fun dateDigitToStr(digital: String): String {
     if (month == parts[1]) return ""
     val year = parts[2]
     return when {
-        ((month == "января") || (month == "марта") || (month == "мая") || (month == "июля") || (month == "августа") ||
-                (month == "октября") || (month == "декабря")) && (date.toInt() > 31) -> ""
-        ((month == "апреля") || (month == "июня") || (month == "сентября") || (month == "ноября")) && (date.toInt() > 30) -> ""
+        ((month == "января") || (month == "марта") || (month == "мая") || (month == "июля") ||
+                (month == "августа") || (month == "октября") || (month == "декабря")) && (date.toInt() > 31) -> ""
+        ((month == "апреля") || (month == "июня") || (month == "сентября") ||
+                (month == "ноября")) && (date.toInt() > 30) -> ""
         ((month == "февраля") && (year.toInt() % 400 == 0 ||
                 (year.toInt() % 100 != 0 && year.toInt() % 4 == 0)) && (date.toInt() > 29)) -> ""
-        ((month == "февраля") && (year.toInt() % 4 != 0 || year.toInt() % 100 == 0) && (date.toInt() > 28)) -> ""
-        year.toInt() == 0 || date.toInt() == 0 -> ""
+        ((month == "февраля") && (year.toInt() % 400 != 0) && (year.toInt() % 4 != 0 || year.toInt() % 100 == 0) &&
+                (year.toInt() != 0) && (date.toInt() > 28)) -> ""
+        date.toInt() == 0 -> ""
         else -> "${date.toInt()} " + month + " ${year.toInt()}"
     }
 }
+
+fun main() {
+    println(dateDigitToStr("29.02.8758800"))
+}
+
 
 /**
  * Средняя
