@@ -174,7 +174,7 @@ fun flattenPhoneNumber(phone: String): String {
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
 fun bestLongJump(jumps: String): Int {
-    if (jumps == "") return -1
+    if (!CheckNumbers(jumps)) return -1
     var result = Int.MIN_VALUE
     val x = mutableSetOf<Char>()
     val str = "0123456789"
@@ -186,6 +186,13 @@ fun bestLongJump(jumps: String): Int {
         if ((x.containsAll(part.toSet())) && (part.toInt() > result)) result = part.toInt()
     }
     return if (result == Int.MIN_VALUE) -1 else result
+}
+
+fun CheckNumbers(str: String): Boolean {
+    val y = listOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9")
+    var numbercheck = 0
+    for (chars in str) if (y.contains(chars.toString())) numbercheck += 1
+    return numbercheck != 0
 }
 
 /**
@@ -231,9 +238,8 @@ fun plusMinus(expression: String): Int {
     val y = listOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-", "+", " ")
     val parts = expression.split(" ")
     require(!(parts[0].startsWith("+") || parts[0].startsWith("-")))
-    var result = 0
     requireNotNull(parts[0].toIntOrNull())
-    result = parts[0].toInt()
+    var result = parts[0].toInt()
     for (i in 1 until parts.size) {
         if (i % 2 == 1) {
             if (parts[i] == "+") n = 1
