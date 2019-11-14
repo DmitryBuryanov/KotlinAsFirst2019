@@ -2,6 +2,7 @@
 
 package lesson6.task1
 
+import lesson2.task2.daysInMonth
 import java.lang.IllegalArgumentException
 import java.lang.IllegalStateException
 import kotlin.system.exitProcess
@@ -61,6 +62,7 @@ fun main() {
     }
 }
 
+
 /**
  * Средняя
  *
@@ -73,30 +75,22 @@ fun main() {
  * входными данными.
  */
 fun dateStrToDigit(str: String): String {
-    val x = listOf<String>(
+    val x = listOf(
         "января", "февраля", "марта", "апреля", "мая", "июня", "июля",
         "августа", "сентября", "октября", "ноября", "декабря"
     )
-    var date = 0
-    var year = 0
     val parts = str.split(" ")
     if (parts.size != 3) return ""
-    if (parts[0].toIntOrNull() == null) return "" else date = parts[0].toInt()
+    val date = parts[0].toIntOrNull() ?: return ""
     var month = parts[1]
-    if (parts[2].toIntOrNull() == null) return "" else year = parts[2].toInt()
-    for (i in 0 until x.size) if (month == x[i]) month = (i + 1).toString()
+    val year = parts[2].toIntOrNull() ?: return ""
+    if (x.indexOf(parts[1]) + 1 in 1..12) month = (x.indexOf(parts[1]) + 1).toString()
+    else return ""
     if (month == parts[1]) return ""
-    return when {
-        ((month == "1") || (month == "3") || (month == "5") || (month == "7") || (month == "8") ||
-                (month == "10") || (month == "12")) && (date > 31) -> ""
-        ((month == "4") || (month == "6") || (month == "9") || (month == "11")) && (date > 30) -> ""
-        ((month == "2") && (year % 400 == 0 ||
-                (year % 100 != 0 && year % 4 == 0)) && (date > 29)) -> ""
-        ((month == "2") && (year % 400 != 0) && (year % 4 != 0 || year % 100 == 0) && (year != 0) && (date > 28)) -> ""
-        date == 0 -> ""
-        else -> "${twoDigitStr(date)}.${twoDigitStr(month.toInt())}.$year"
-    }
+    return if (date !in 1..daysInMonth(month.toInt(), year)) ""
+    else "${twoDigitStr(date)}.${twoDigitStr(month.toInt())}.$year"
 }
+
 
 /**
  * Средняя
@@ -109,33 +103,22 @@ fun dateStrToDigit(str: String): String {
  * входными данными.
  */
 fun dateDigitToStr(digital: String): String {
-    val dateInMonths = mapOf<String, String>(
+    val dateInMonths = mapOf(
         "января" to "01", "февраля" to "02",
         "марта" to "03", "апреля" to "04", "мая" to "05", "июня" to "06", "июля" to "07", "августа" to "08",
         "сентября" to "09", "октября" to "10", "ноября" to "11", "декабря" to "12"
     )
-    var date = ""
-    var year = ""
     val parts = digital.split(".")
     if (parts.size != 3) return ""
-    if (parts[0].toIntOrNull() == null) return "" else date = parts[0]
+    val date = parts[0].toIntOrNull() ?: return ""
+    val year = parts[2].toIntOrNull() ?: return ""
     var month = parts[1]
     for ((names, dates) in dateInMonths) if (month == dates) month = names
     if (month == parts[1]) return ""
-    if (parts[2].toIntOrNull() == null) return "" else year = parts[2]
-    return when {
-        ((month == "января") || (month == "марта") || (month == "мая") || (month == "июля") ||
-                (month == "августа") || (month == "октября") || (month == "декабря")) && (date.toInt() > 31) -> ""
-        ((month == "апреля") || (month == "июня") || (month == "сентября") ||
-                (month == "ноября")) && (date.toInt() > 30) -> ""
-        ((month == "февраля") && (year.toInt() % 400 == 0 ||
-                (year.toInt() % 100 != 0 && year.toInt() % 4 == 0)) && (date.toInt() > 29)) -> ""
-        ((month == "февраля") && (year.toInt() % 400 != 0) && (year.toInt() % 4 != 0 || year.toInt() % 100 == 0) &&
-                (year.toInt() != 0) && (date.toInt() > 28)) -> ""
-        date.toInt() == 0 -> ""
-        else -> "${date.toInt()} " + month + " ${year.toInt()}"
-    }
+    return if (date !in 1..daysInMonth(dateInMonths.getOrDefault(month, "0").toInt(), year)) ""
+    else "$date $month $year"
 }
+
 
 /**
  * Средняя
@@ -153,12 +136,12 @@ fun dateDigitToStr(digital: String): String {
  */
 fun flattenPhoneNumber(phone: String): String {
     var result = ""
-    val x = listOf<String>("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", " ", "+", "-", ")", "(")
-    for (i in 0 until phone.length) {
-        val y = phone[i].toString()
+    val x = setOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", " ", "+", "-", ")", "(")
+    if (phone.contains("()")) return ""
+    for (elements in phone) {
+        val y = elements.toString()
         if (y !in x) return ""
-        if (phone.contains("()")) return ""
-        if ((x.contains(y)) && (y != " ") && (y != "-") && (y != "(") && (y != ")")) result += y
+        if ((y != " ") && (y != "-") && (y != "(") && (y != ")")) result += y
     }
     return result
 }
@@ -174,21 +157,19 @@ fun flattenPhoneNumber(phone: String): String {
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
 fun bestLongJump(jumps: String): Int {
-    if (!CheckNumbers(jumps)) return -1
-    var result = Int.MIN_VALUE
-    val x = mutableSetOf<Char>()
-    val str = "0123456789"
-    for (chars in str) x.add(chars)
+    if (!checkNumbers(jumps)) return -1
+    var result = -1
+    val x = mutableSetOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
     val y = listOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-", "%", " ")
     for (chars in jumps) if (!y.contains(chars.toString())) return -1
     val parts = jumps.split(" ")
     for (part in parts) {
         if ((x.containsAll(part.toSet())) && (part.toInt() > result)) result = part.toInt()
     }
-    return if (result == Int.MIN_VALUE) -1 else result
+    return result
 }
 
-fun CheckNumbers(str: String): Boolean {
+fun checkNumbers(str: String): Boolean {
     val y = listOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9")
     var numbercheck = 0
     for (chars in str) if (y.contains(chars.toString())) numbercheck += 1
@@ -208,9 +189,7 @@ fun CheckNumbers(str: String): Boolean {
  */
 fun bestHighJump(jumps: String): Int {
     var result = Int.MIN_VALUE
-    val x = mutableSetOf<Char>()
-    val str = "0123456789"
-    for (chars in str) x.add(chars)
+    val x = mutableSetOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
     val y = listOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-", "%", "+", " ")
     for (chars in jumps) if (!y.contains(chars.toString())) return -1
     val parts = jumps.split(" ")
@@ -232,9 +211,7 @@ fun bestHighJump(jumps: String): Int {
  */
 fun plusMinus(expression: String): Int {
     var n = 1
-    val x = mutableSetOf<Char>()
-    val str = "0123456789"
-    for (chars in str) x.add(chars)
+    val x = mutableSetOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
     val y = listOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-", "+", " ")
     val parts = expression.split(" ")
     require(!(parts[0].startsWith("+") || parts[0].startsWith("-")))
@@ -261,15 +238,15 @@ fun plusMinus(expression: String): Int {
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
 fun firstDuplicateIndex(str: String): Int {
-    var word = ""
-    val parts = str.split(" ")
+    var ind = -1
+    val parts = str.toLowerCase().split(" ")
     for (i in 0 until parts.size - 1) {
-        if (parts[i].toLowerCase() == parts[i + 1].toLowerCase()) {
-            word = parts[i] + " " + parts[i + 1]
+        if (parts[i] == parts[i + 1]) {
+            ind = str.toLowerCase().indexOf(parts[i] + " " + parts[i + 1])
             break
         }
     }
-    return if (word == "") -1 else str.indexOf(word)
+    return ind
 }
 
 /**
@@ -285,19 +262,17 @@ fun firstDuplicateIndex(str: String): Int {
  */
 fun mostExpensive(description: String): String {
     var result = ""
-    var max1 = Int.MIN_VALUE.toDouble()
+    var max1 = Double.MIN_VALUE
     val parts = description.split("; ")
-    val products = mutableMapOf<String, Double>()
     for (part in parts) {
         val prod = part.split(" ")
         if (prod.size != 2) return ""
         if (prod[1].toDoubleOrNull() == null) return ""
-        else products.put(prod[0], prod[1].toDouble())
-    }
-    for ((name, cost) in products) {
-        if (cost > max1) {
-            max1 = cost
-            result = name
+        else {
+            if (prod[1].toDouble() > max1) {
+                max1 = prod[1].toDouble()
+                result = prod[0]
+            }
         }
     }
     return result
