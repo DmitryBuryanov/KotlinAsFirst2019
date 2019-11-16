@@ -229,14 +229,16 @@ fun plusMinus(expression: String): Int {
  */
 fun firstDuplicateIndex(str: String): Int {
     var ind = 0
+    var checkind = 0
     val parts = str.toLowerCase().split(" ")
     for (i in 0 until parts.size - 1) {
         if (parts[i] == parts[i + 1]) {
+            checkind += 1
             break
         }
         ind += parts[i].length + 1
     }
-    return if (ind == 0) -1 else ind
+    return if (checkind == 0) -1 else ind
 }
 
 /**
