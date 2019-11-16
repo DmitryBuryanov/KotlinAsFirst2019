@@ -157,23 +157,14 @@ fun flattenPhoneNumber(phone: String): String {
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
 fun bestLongJump(jumps: String): Int {
-    if (!checkNumbers(jumps)) return -1
+    if (!jumps.matches(Regex("""(\d+)((\s+)(\d+|-+|%+))*(\d+)"""))) return -1
     var result = -1
     val x = mutableSetOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
-    val y = listOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-", "%", " ")
-    for (chars in jumps) if (!y.contains(chars.toString())) return -1
     val parts = jumps.split(" ")
     for (part in parts) {
         if ((x.containsAll(part.toSet())) && (part.toInt() > result)) result = part.toInt()
     }
     return result
-}
-
-fun checkNumbers(str: String): Boolean {
-    val y = listOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9")
-    var numbercheck = 0
-    for (chars in str) if (y.contains(chars.toString())) numbercheck += 1
-    return numbercheck != 0
 }
 
 /**
@@ -189,9 +180,8 @@ fun checkNumbers(str: String): Boolean {
  */
 fun bestHighJump(jumps: String): Int {
     var result = Int.MIN_VALUE
+    if (!jumps.matches(Regex("""(\d+)\s+[+%\-]+(\s+(\d+)\s+[+%\-]+)*"""))) return -1
     val x = mutableSetOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
-    val y = listOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-", "%", "+", " ")
-    for (chars in jumps) if (!y.contains(chars.toString())) return -1
     val parts = jumps.split(" ")
     for (i in 0 until parts.size - 1) {
         if ((x.containsAll(parts[i].toSet())) && (parts[i + 1].contains("+")) && (parts[i].toInt() > result))
@@ -238,15 +228,15 @@ fun plusMinus(expression: String): Int {
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
 fun firstDuplicateIndex(str: String): Int {
-    var ind = -1
+    var ind = 0
     val parts = str.toLowerCase().split(" ")
     for (i in 0 until parts.size - 1) {
         if (parts[i] == parts[i + 1]) {
-            ind = str.toLowerCase().indexOf(parts[i] + " " + parts[i + 1])
             break
         }
+        ind += parts[i].length + 1
     }
-    return ind
+    return if (ind == 0) -1 else ind
 }
 
 /**
@@ -262,7 +252,7 @@ fun firstDuplicateIndex(str: String): Int {
  */
 fun mostExpensive(description: String): String {
     var result = ""
-    var max1 = - Double.MAX_VALUE
+    var max1 = Double.MIN_VALUE
     val parts = description.split("; ")
     for (part in parts) {
         val prod = part.split(" ")
@@ -304,7 +294,7 @@ fun fromRoman(roman: String): Int {
             roman1 = roman1.substring(0, roman1.length - rom[i].length)
         }
     }
-    return if (roman1 == "") result else -1
+    return if (roman1.isEmpty()) result else -1
 }
 
 /**
