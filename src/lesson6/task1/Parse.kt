@@ -252,7 +252,7 @@ fun firstDuplicateIndex(str: String): Int {
  */
 fun mostExpensive(description: String): String {
     var result = ""
-    var max1 = Double.MIN_VALUE
+    var max1 = -Double.MIN_VALUE
     val parts = description.split("; ")
     for (part in parts) {
         val prod = part.split(" ")
