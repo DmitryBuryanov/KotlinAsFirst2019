@@ -294,7 +294,46 @@ fun hasAnagrams(words: List<String>): Boolean {
  *          "Mikhail" to setOf("Sveta", "Marat")
  *        )
  */
-fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> = TODO()
+fun friendsset(name: String, friends: Map<String, Set<String>>): Set<String> {
+    var result = mutableSetOf<String>()
+    for ((chel, chelfriends) in friends) {
+        if (chel == name) {
+            result = chelfriends.toMutableSet()
+            break
+        }
+    }
+    for (names in result) {
+        for (elements in friends.getOrDefault(names, mutableSetOf())) {
+            result.add(elements)
+        }
+    }
+    return result - name
+}
+
+fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
+    val unknown = mutableSetOf<String>()
+    for ((name, frds) in friends) {
+        for (elements in frds) unknown.add(elements)
+    }
+    val result = mutableMapOf<String, MutableSet<String>>()
+    for ((name, frds) in friends) {
+        if (result.getOrDefault(name, mutableSetOf()) == setOf<String>()) result.put(name, mutableSetOf())
+        result[name] = friendsset(name, friends).toMutableSet()
+        unknown.remove(name)
+    }
+    for (elements in unknown) result.put(elements, mutableSetOf())
+    return result
+}
+
+fun main() {
+    println(propagateHandshakes(
+        mapOf(
+            "Marat" to setOf("Sveta"),
+            "Sveta" to setOf("Mikhail")
+        ))
+    )
+}
+
 
 /**
  * Сложная
