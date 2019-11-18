@@ -303,8 +303,8 @@ fun friendsset(name: String, friends: Map<String, Set<String>>): Set<String> {
         }
     }
     for (names in result) {
-        if (friends[name] != null) {
-            for (elements in friends[name]!!) result.add(elements)
+        for (elements in friends.getOrDefault(names, mutableSetOf())) {
+            result.add(elements)
         }
     }
     return result - name
