@@ -303,8 +303,8 @@ fun friendsset(name: String, friends: Map<String, Set<String>>): Set<String> {
         }
     }
     for (names in result) {
-        for (elements in friends.getOrDefault(names, mutableSetOf())) {
-            result.add(elements)
+        if (friends[name] != null) {
+            for (elements in friends[name]!!) result.add(elements)
         }
     }
     return result - name
@@ -324,16 +324,6 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
     for (elements in unknown) result.put(elements, mutableSetOf())
     return result
 }
-
-fun main() {
-    println(propagateHandshakes(
-        mapOf(
-            "Marat" to setOf("Sveta"),
-            "Sveta" to setOf("Mikhail")
-        ))
-    )
-}
-
 
 /**
  * Сложная
