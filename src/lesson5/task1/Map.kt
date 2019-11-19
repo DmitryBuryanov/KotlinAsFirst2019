@@ -302,12 +302,13 @@ fun friendsset(name: String, friends: Map<String, Set<String>>): Set<String> {
             break
         }
     }
+    val namesToAdd = mutableSetOf<String>()
     for (names in result) {
         for (elements in friends.getOrDefault(names, mutableSetOf())) {
-            result.add(elements)
+            namesToAdd.add(elements)
         }
     }
-    return result - name
+    return result + namesToAdd - name
 }
 
 fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
