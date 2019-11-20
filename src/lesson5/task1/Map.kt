@@ -333,16 +333,6 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
     return result
 }
 
-fun main() {
-    println(propagateHandshakes(
-        mapOf(
-            "0" to setOf("210"),
-            "2" to setOf("0"),
-            "1" to setOf("2")
-        )
-    ))
-}
-
 /**
  * Сложная
  *
