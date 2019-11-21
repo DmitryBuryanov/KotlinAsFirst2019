@@ -62,7 +62,6 @@ fun main() {
     }
 }
 
-
 /**
  * Средняя
  *
@@ -343,12 +342,12 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     var sk2 = 0
     var ind = cells / 2
     var i = 0
-    for (i in 0 until cells) list.add(0)
+    for (j in 0 until cells) list.add(0)
     val simbols = listOf(">", "<", "+", "-", " ", "[", "]")
-    for (i in commands.indices) {
-        if (commands[i].toString() !in simbols) throw IllegalArgumentException()
-        if (commands[i].toString() == "[") sk1 += 1
-        if (commands[i].toString() == "]") sk2 += 1
+    for (j in commands.indices) {
+        if (commands[j].toString() !in simbols) throw IllegalArgumentException()
+        if (commands[j].toString() == "[") sk1 += 1
+        if (commands[j].toString() == "]") sk2 += 1
     }
     if (sk1 != sk2) throw IllegalArgumentException()
     while ((checklimit <= limit) && (i != commands.length)) {
@@ -358,8 +357,14 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
             ">" -> ind += 1
             "<" -> ind -= 1
             " " -> ind = ind
-            "[" -> if (list[ind] == 0) i = closebracketsInd(commands, i)
-            "]" -> if (list[ind] != 0) i = openbracketsInd(commands, i)
+            "[" -> {
+                if (closebracketsInd(commands, i) == -1) throw IllegalArgumentException()
+                else if (list[ind] == 0) i = closebracketsInd(commands, i)
+            }
+            "]" -> {
+                if (openbracketsInd(commands, i) == -1) throw IllegalArgumentException()
+                if (list[ind] != 0) i = openbracketsInd(commands, i)
+            }
             else -> throw IllegalArgumentException()
         }
         if ((ind > list.size - 1) || (ind < 0)) throw IllegalStateException()
@@ -376,7 +381,7 @@ fun closebracketsInd(str: String, ind: Int): Int {
         if ((str[i].toString() == "]") && (openbr != 0)) openbr -= 1
         if (str[i].toString() == "[") openbr += 1
     }
-    return 0
+    return -1
 }
 
 fun openbracketsInd(str: String, ind: Int): Int {
@@ -386,5 +391,5 @@ fun openbracketsInd(str: String, ind: Int): Int {
         if ((str[i].toString() == "[") && (closebr != 0)) closebr -= 1
         if (str[i].toString() == "]") closebr += 1
     }
-    return 0
+    return -1
 }
