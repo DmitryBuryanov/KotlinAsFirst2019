@@ -212,7 +212,6 @@ fun plusMinus(expression: String): Int {
             else if (parts[i] == "-") n = -1
         } else if (x.containsAll(parts[i].toSet())) result += parts[i].toInt() * n
         else throw IllegalArgumentException()
-
     }
     return result
 }
