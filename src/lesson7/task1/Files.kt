@@ -198,17 +198,15 @@ fun alignFileByWidth(inputName: String, outputName: String) {
         }
         xlength -= 1
         val spaceCount = maxlength - xlength
-        var oneSpace = ""
-        var xSpace = ""
-        if (spaceCount / (words.size - 1) != 0) xSpace = " "
-        for (i in 0 until spaceCount / (words.size - 1)) {
-            oneSpace += " "
+        var oneSpace = " "
+        var spaceX = ""
+        for (i in 0 until spaceCount / (words.size - 1)) oneSpace += " "
+        if (spaceCount % (words.size - 1) != 0) spaceX = " "
+        for (i in words.indices) {
+            if (i <= spaceCount % (words.size - 1)) line += words[i] + oneSpace + spaceX
+            else line += words[i] + oneSpace
         }
-        for (i in 0 until words.size) {
-            line += if (i <= spaceCount / (words.size - 1)) words[i] + " " + oneSpace + xSpace
-            else words[i] + " " + oneSpace
-        }
-        output.write(line.trim())
+        output.write(line)
         output.newLine()
     }
     output.close()
@@ -309,7 +307,7 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
                         val x = line[0]
                         val y = line[1]
                         line = line.replace(Regex("""$x$y"""), x.toString().toUpperCase() + y.toString().toLowerCase())
-                    } else if (j == 0) line =
+                    } else if ((j == 0) && (line[0].toString().matches(Regex("""[a-zа-я]""")))) line =
                         line.replace (line[0], line[0].toUpperCase())
                 }
             }
@@ -347,11 +345,11 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
 fun chooseLongestChaoticWord(inputName: String, outputName: String) {
     val output = File(outputName).bufferedWriter()
     var max1 = Int.MIN_VALUE
-    if (File(inputName).readText().isEmpty()) {
-        output.write("")
-        output.close()
-    }
     for (lines in File(inputName).readLines()) {
+        if ((lines == "") && (File(inputName).readLines().size == 1)) {
+            output.write(lines)
+            output.close()
+        }
         if (lines.length > max1) max1 = lines.length
     }
     var line = ""
