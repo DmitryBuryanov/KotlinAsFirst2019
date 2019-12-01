@@ -3,6 +3,7 @@
 package lesson7.task1
 
 import java.io.File
+import kotlin.math.max
 
 /**
  * Пример
@@ -167,7 +168,37 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    TODO()
+    val output = File(outputName).bufferedWriter()
+    var maxlength = Int.MIN_VALUE
+    for (lines in File(inputName).readLines()) {
+        var length = 0
+        for (words in lines.split(Regex("""\s+"""))) {
+            length += words.length + 1
+        }
+        length -= 1
+        if (length > maxlength) maxlength = length
+    }
+    for (lines in File(inputName).readLines()) {
+        var line = ""
+        var xlength = 0
+        val words = lines.split((Regex("""\s+""")))
+        if (words.size == 1) {
+            output.write(lines.trim())
+            output.newLine()
+            continue
+        }
+        if (lines.matches(Regex("""\s*"""))) {
+            output.write(line)
+            output.newLine()
+            continue
+        }
+
+
+        }
+        output.write(line.trim())
+        output.newLine()
+    }
+    output.close()
 }
 
 /**
@@ -301,7 +332,23 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
 fun chooseLongestChaoticWord(inputName: String, outputName: String) {
-    TODO()
+    val output = File(outputName).bufferedWriter()
+    var max1 = Int.MIN_VALUE
+    for (lines in File(inputName).readLines()) {
+        if (lines.length > max1) max1 = lines.length
+    }
+    var line = ""
+    for (lines in File(inputName).readLines()) {
+        val simbols = mutableSetOf<Char>()
+        for (elements in lines) {
+            simbols.add(elements.toLowerCase())
+        }
+        if ((simbols.size == lines.length) && (lines.length == max1)) {
+            line += "$lines, "
+        }
+    }
+    output.write(line.substring(0, line.length - 2))
+    output.close()
 }
 
 /**
