@@ -137,6 +137,7 @@ fun flattenPhoneNumber(phone: String): String {
     var result = ""
     val x = setOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", " ", "+", "-", ")", "(")
     if (phone.contains("()")) return ""
+    if (phone.matches(Regex("""[\+\-\(\)]+"""))) return ""
     for (elements in phone) {
         val y = elements.toString()
         if (y !in x) return ""

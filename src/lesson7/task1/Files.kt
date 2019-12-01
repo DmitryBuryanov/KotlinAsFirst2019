@@ -56,9 +56,10 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  */
 fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
     val result = mutableMapOf<String, Int>()
-    for (elements in substrings) result[elements] = 0
+    val substrings1 = substrings.toSet()
+    for (elements in substrings1) result[elements] = 0
     for (lines in File(inputName).readLines()) {
-        for (elements in substrings) {
+        for (elements in substrings1) {
             val windows = lines.windowed(elements.length, 1)
             for (wind in windows) {
                 if (elements.toLowerCase() == wind.toLowerCase()) result[elements] =
@@ -168,9 +169,7 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    TODO()
-}
-    /*val output = File(outputName).bufferedWriter()
+    val output = File(outputName).bufferedWriter()
     var maxlength = Int.MIN_VALUE
     for (lines in File(inputName).readLines()) {
         var length = 0
@@ -198,12 +197,22 @@ fun alignFileByWidth(inputName: String, outputName: String) {
             xlength += word.length + 1
         }
         xlength -= 1
-        var spaceCount = maxlength - xlength
+        val spaceCount = maxlength - xlength
+        var oneSpace = ""
+        var xSpace = ""
+        if (spaceCount / (words.size - 1) != 0) xSpace = " "
+        for (i in 0 until spaceCount / (words.size - 1)) {
+            oneSpace += " "
+        }
+        for (i in 0 until words.size) {
+            line += if (i <= spaceCount / (words.size - 1)) words[i] + " " + oneSpace + xSpace
+            else words[i] + " " + oneSpace
+        }
         output.write(line.trim())
         output.newLine()
     }
     output.close()
-}*/
+}
 
 /**
  * Средняя
@@ -300,8 +309,8 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
                         val x = line[0]
                         val y = line[1]
                         line = line.replace(Regex("""$x$y"""), x.toString().toUpperCase() + y.toString().toLowerCase())
-                    } else if ((i == 0) && (lines[j] == lines[0]) && (line.length == 1)) line =
-                        line.replace(line[0], line[0].toUpperCase())
+                    } else if (j == 0) line =
+                        line.replace (line[0], line[0].toUpperCase())
                 }
             }
         }
@@ -338,6 +347,10 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
 fun chooseLongestChaoticWord(inputName: String, outputName: String) {
     val output = File(outputName).bufferedWriter()
     var max1 = Int.MIN_VALUE
+    if (File(inputName).readText().isEmpty()) {
+        output.write("")
+        output.close()
+    }
     for (lines in File(inputName).readLines()) {
         if (lines.length > max1) max1 = lines.length
     }
