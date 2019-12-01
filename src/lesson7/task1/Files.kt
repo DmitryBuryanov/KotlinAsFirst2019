@@ -2,6 +2,7 @@
 
 package lesson7.task1
 
+import kotlinx.html.FIELDSET
 import java.io.File
 import kotlin.math.max
 
@@ -206,7 +207,7 @@ fun alignFileByWidth(inputName: String, outputName: String) {
             if (i <= spaceCount % (words.size - 1)) line += words[i] + oneSpace + spaceX
             else line += words[i] + oneSpace
         }
-        output.write(line)
+        output.write(line.trim())
         output.newLine()
     }
     output.close()
@@ -308,7 +309,7 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
                         val y = line[1]
                         line = line.replace(Regex("""$x$y"""), x.toString().toUpperCase() + y.toString().toLowerCase())
                     } else if ((j == 0) && (line[0].toString().matches(Regex("""[a-zа-я]""")))) line =
-                        line.replace (line[0], line[0].toUpperCase())
+                        line.replace(line[0], line[0].toUpperCase())
                 }
             }
         }
