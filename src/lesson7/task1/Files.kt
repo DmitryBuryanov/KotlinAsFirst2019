@@ -194,7 +194,7 @@ fun alignFileByWidth(inputName: String, outputName: String) {
             output.newLine()
             continue
         }
-        if (line.matches(Regex("""\s*[а-яА-Яa-zA-Z]+\s*"""))) {
+        if (line.matches(Regex("""\s*\S+\s*"""))) {
             output.write(line.trim())
             output.newLine()
             continue
@@ -324,11 +324,8 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
                 }
             }
         }
-        if (j == 0 && line[0].toString().toLowerCase().matches(Regex("""[a-zа-я]"""))) {
-            val f = line[0].toString()
-            line = line.replace(f, f.toUpperCase())
-        }
-        output.write(line)
+        if (lines.size == 1 && line.length == 1) output.write(line.toUpperCase())
+        else output.write(line)
         output.newLine()
     }
     output.close()
