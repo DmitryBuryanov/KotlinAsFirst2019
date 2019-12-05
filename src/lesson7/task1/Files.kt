@@ -268,7 +268,8 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
                         val x = line[0]
                         val y = line[1]
                         line = line.replace(Regex("""$x$y"""), x.toString().toUpperCase() + y.toString().toLowerCase())
-                    } else if (j == 0) line = line.replace(line[0], line[0].toUpperCase())
+                    } else if (j == 0 && line[0].toString().matches(Regex("""а-яa-z"""))) line =
+                        line.replace(line[0], line[0].toUpperCase())
                 }
             }
         }
@@ -306,15 +307,12 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
     val output = File(outputName).bufferedWriter()
     var max1 = Int.MIN_VALUE
     val line1 = File(inputName).readText()
-    if (line1.matches(Regex("""\s*"""))) {
-        output.write(line1)
-        output.close()
-    }
     for (lines in File(inputName).readLines()) {
         if (lines.length > max1) max1 = lines.length
     }
     var line = ""
     for (lines in File(inputName).readLines()) {
+        if (lines.matches(Regex("""\s*"""))) break
         val simbols = mutableSetOf<Char>()
         for (elements in lines) {
             simbols.add(elements.toLowerCase())
@@ -323,7 +321,8 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
             line += "$lines, "
         }
     }
-    output.write(line.substring(0, line.length - 2))
+    if (line.matches(Regex("""\s*"""))) output.write(line)
+    else output.write(line.substring(0, line.length - 2))
     output.close()
 }
 
