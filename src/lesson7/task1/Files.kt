@@ -263,12 +263,15 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
             for ((key, value) in dictionary) {
                 if (checkline[i] == key.toLowerCase()) {
                     val z = checkline[i].toString()
-                    line = line.replace(z, value.toLowerCase())
+                    val k: String
+                    if (value.matches(Regex("""[a-zа-яA-ZА-Я]+"""))) k = value.toLowerCase()
+                    else k = value
+                    line = line.replace(z, k)
                     if ((i == 0) && (lines[j] == lines[0]) && (line.length >= 2)) {
                         val x = line[0]
                         val y = line[1]
                         line = line.replace(Regex("""$x$y"""), x.toString().toUpperCase() + y.toString().toLowerCase())
-                    } else if (j == 0 && line[0].toString().matches(Regex("""а-яa-z"""))) line =
+                    } else if (j == 0 && line[0].toString().matches(Regex("""[а-яa-z]"""))) line =
                         line.replace(line[0], line[0].toUpperCase())
                 }
             }
@@ -308,7 +311,7 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
     var max1 = Int.MIN_VALUE
     val line1 = File(inputName).readText()
     for (lines in File(inputName).readLines()) {
-        if (lines.length > max1) max1 = lines.length
+        if ((lines.length > max1) && (lines.toSet().size == lines.length)) max1 = lines.length
     }
     var line = ""
     for (lines in File(inputName).readLines()) {
