@@ -170,9 +170,51 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    TODO()
+    val output = File(outputName).bufferedWriter()
+    val lines = File(inputName).readLines()
+    var maxLength = Int.MIN_VALUE
+    for (line in lines) {
+        var str = ""
+        val words = line.split(Regex("""\s+"""))
+        for (word in words) {
+            str += "$word "
+        }
+        str = str.trim()
+        if (str.length > maxLength) maxLength = str.length
+    }
+    for (line in lines) {
+        var str = ""
+        if (line.matches(Regex("""\s*"""))) {
+            output.write(str)
+            output.newLine()
+            continue
+        }
+        if (line.matches(Regex("""\s*[а-яА-Яa-zA-Z]+\s*"""))) {
+            output.write(line.trim())
+            output.newLine()
+            continue
+        }
+        val words = line.trim().split(Regex("""\s+"""))
+        var passiveLine = ""
+        for (word in words) passiveLine += "$word "
+        passiveLine = passiveLine.trim()
+        val spaceCount = maxLength - passiveLine.length
+        val oneSpaceLength = spaceCount / (words.size - 1)
+        var oneSpace = " "
+        for (i in 0 until oneSpaceLength) oneSpace += " "
+        var extraSpace = ""
+        val extraSpaceCount = spaceCount % (words.size - 1)
+        if (extraSpaceCount != 0) extraSpace = " "
+        for (i in words.indices) {
+            val x = words[i]
+            if (i <= extraSpaceCount - 1) str += "$x$oneSpace$extraSpace"
+            else str += "$x$oneSpace"
+        }
+        output.write(str.trim())
+        output.newLine()
+    }
+    output.close()
 }
-
 
 /**
  * Средняя
@@ -269,12 +311,12 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
                     else k = value
                     line = line.replace(z, k)
                     if (line.isEmpty()) continue
-                    if ((i == 0) && (lines[j] == lines[0]) && (line.length >= 2)) {
+                    if ((i == 0) && (j == 0) && (line.length >= 2)) {
                         val x = line[0]
                         val y = line[1]
                         line = line.replace(Regex("""$x$y"""), x.toString().toUpperCase() + y.toString().toLowerCase())
-                    } else if (j == 0 && line[0].toString().matches(Regex("""[а-яa-z]"""))) line =
-                        line.replace(line[0], line[0].toUpperCase())
+                    } else if (j == 0 && line.length == 1 && line.matches(Regex("""[a-zа-я]+"""))) line =
+                        line.toUpperCase()
                 }
             }
         }
