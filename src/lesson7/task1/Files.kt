@@ -173,6 +173,7 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     TODO()
 }
 
+
 /**
  * Средняя
  *
@@ -267,6 +268,7 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
                     if (value.matches(Regex("""[a-zа-яA-ZА-Я]+"""))) k = value.toLowerCase()
                     else k = value
                     line = line.replace(z, k)
+                    if (line.isEmpty()) continue
                     if ((i == 0) && (lines[j] == lines[0]) && (line.length >= 2)) {
                         val x = line[0]
                         val y = line[1]
@@ -311,7 +313,7 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
     var max1 = Int.MIN_VALUE
     val line1 = File(inputName).readText()
     for (lines in File(inputName).readLines()) {
-        if ((lines.length > max1) && (lines.toSet().size == lines.length)) max1 = lines.length
+        if ((lines.length > max1) && (lines.toLowerCase().toSet().size == lines.length)) max1 = lines.length
     }
     var line = ""
     for (lines in File(inputName).readLines()) {
