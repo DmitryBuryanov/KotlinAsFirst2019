@@ -320,10 +320,13 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
                         val x = line[0]
                         val y = line[1]
                         line = line.replace(Regex("""$x$y"""), x.toString().toUpperCase() + y.toString().toLowerCase())
-                    } else if (j == 0 && line.length == 1 && line.matches(Regex("""[a-zа-я]+"""))) line =
-                        line.toUpperCase()
+                    }
                 }
             }
+        }
+        if (j == 0 && line[0].toString().toLowerCase().matches(Regex("""[a-zа-я]"""))) {
+            val f = line[0].toString()
+            line = line.replace(f, f.toUpperCase())
         }
         output.write(line)
         output.newLine()
