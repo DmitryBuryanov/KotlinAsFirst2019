@@ -183,6 +183,11 @@ fun alignFileByWidth(inputName: String, outputName: String) {
         if (str.length > maxLength) maxLength = str.length
     }
     for (line in lines) {
+        if (lines.size == 1) {
+            output.write(line.trim())
+            output.newLine()
+            continue
+        }
         var str = ""
         if (line.matches(Regex("""\s*"""))) {
             output.write(str)
