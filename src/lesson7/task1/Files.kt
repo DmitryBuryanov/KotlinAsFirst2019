@@ -170,47 +170,7 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    val output = File(outputName).bufferedWriter()
-    var maxlength = Int.MIN_VALUE
-    for (lines in File(inputName).readLines()) {
-        var length = 0
-        for (words in lines.split(Regex("""\s+"""))) {
-            length += words.length + 1
-        }
-        length -= 1
-        if (length > maxlength) maxlength = length
-    }
-    for (lines in File(inputName).readLines()) {
-        var line = ""
-        var xlength = 0
-        val words = lines.split((Regex("""\s+""")))
-        if (words.size == 1) {
-            output.write(lines.trim())
-            output.newLine()
-            continue
-        }
-        if (lines.matches(Regex("""\s*"""))) {
-            output.write(line)
-            output.newLine()
-            continue
-        }
-        for (word in words) {
-            xlength += word.length + 1
-        }
-        xlength -= 1
-        val spaceCount = maxlength - xlength
-        var oneSpace = " "
-        var spaceX = ""
-        for (i in 0 until spaceCount / (words.size - 1)) oneSpace += " "
-        if (spaceCount % (words.size - 1) != 0) spaceX = " "
-        for (i in words.indices) {
-            if (i <= spaceCount % (words.size - 1)) line += words[i] + oneSpace + spaceX
-            else line += words[i] + oneSpace
-        }
-        output.write(line.trim())
-        output.newLine()
-    }
-    output.close()
+    TODO()
 }
 
 /**
@@ -308,8 +268,7 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
                         val x = line[0]
                         val y = line[1]
                         line = line.replace(Regex("""$x$y"""), x.toString().toUpperCase() + y.toString().toLowerCase())
-                    } else if ((j == 0) && (line[0].toString().matches(Regex("""[a-zа-я]""")))) line =
-                        line.replace(line[0], line[0].toUpperCase())
+                    } else if (j == 0) line = line.replace(line[0], line[0].toUpperCase())
                 }
             }
         }
@@ -346,11 +305,12 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
 fun chooseLongestChaoticWord(inputName: String, outputName: String) {
     val output = File(outputName).bufferedWriter()
     var max1 = Int.MIN_VALUE
+    val line1 = File(inputName).readText()
+    if (line1.matches(Regex("""\s*"""))) {
+        output.write(line1)
+        output.close()
+    }
     for (lines in File(inputName).readLines()) {
-        if ((lines == "") && (File(inputName).readLines().size == 1)) {
-            output.write(lines)
-            output.close()
-        }
         if (lines.length > max1) max1 = lines.length
     }
     var line = ""
