@@ -127,10 +127,11 @@ fun sibilants(inputName: String, outputName: String) {
 fun centerFile(inputName: String, outputName: String) {
     var maxlength = 0
     val output = File(outputName).bufferedWriter()
-    for (lines in File(inputName).readLines()) {
+    val strings = File(inputName).readLines()
+    for (lines in strings) {
         if (lines.trim().length > maxlength) maxlength = lines.trim().length
     }
-    for (lines in File(inputName).readLines()) {
+    for (lines in strings) {
         var line = ""
         for (i in 1..(maxlength - lines.trim().length) / 2) {
             line += " "
@@ -324,8 +325,7 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
                 }
             }
         }
-        if (lines.size == 1 && line.length == 1 && line.toLowerCase() == line) output.write(line.toUpperCase())
-        else output.write(line)
+        output.write(line)
         output.newLine()
     }
     output.close()
@@ -358,12 +358,10 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
 fun chooseLongestChaoticWord(inputName: String, outputName: String) {
     val output = File(outputName).bufferedWriter()
     var max1 = Int.MIN_VALUE
-    val line1 = File(inputName).readText()
-    for (lines in File(inputName).readLines()) {
-        if ((lines.length > max1) && (lines.toLowerCase().toSet().size == lines.length)) max1 = lines.length
-    }
+    val strings = File(inputName).readLines()
     var line = ""
-    for (lines in File(inputName).readLines()) {
+    for (lines in strings) {
+        if ((lines.length > max1) && (lines.toLowerCase().toSet().size == lines.length)) max1 = lines.length
         if (lines.matches(Regex("""\s*"""))) break
         val simbols = mutableSetOf<Char>()
         for (elements in lines) {
