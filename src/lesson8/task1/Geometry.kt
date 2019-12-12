@@ -78,7 +78,7 @@ data class Circle(val center: Point, val radius: Double) {
      * Расстояние между пересекающимися окружностями считать равным 0.0.
      */
     fun distance(other: Circle): Double {
-        return if (center.distance(other.center) <= radius) 0.0
+        return if (center.distance(other.center) <= radius + other.radius) 0.0
         else center.distance(other.center) - radius - other.radius
     }
 
@@ -131,7 +131,7 @@ fun diameter(vararg points: Point): Segment {
  * Центр её должен находиться посередине между точками, а радиус составлять половину расстояния между ними
  */
 fun circleByDiameter(diameter: Segment): Circle {
-    val center = Point(abs(diameter.end.x - diameter.begin.x) / 2, abs(diameter.end.y - diameter.begin.y) / 2)
+    val center = Point((diameter.end.x + diameter.begin.x) / 2, (diameter.end.y + diameter.begin.y) / 2)
     val radius = diameter.end.distance(diameter.begin) / 2
     return Circle(center, radius)
 }
@@ -179,7 +179,7 @@ class Line private constructor(val b: Double, val angle: Double) {
  * Построить прямую по отрезку
  */
 fun lineBySegment(s: Segment): Line {
-    val angle = atan(((s.begin.y - s.end.y) / (s.begin.x - s.end.x)))
+    val angle = atan(abs((s.begin.y - s.end.y) / (s.begin.x - s.end.x)))
     return Line(Point(s.begin.x, s.begin.y), angle)
 }
 
@@ -189,7 +189,7 @@ fun lineBySegment(s: Segment): Line {
  * Построить прямую по двум точкам
  */
 fun lineByPoints(a: Point, b: Point): Line {
-    val angle = atan(abs((a.y - b.y) / (a.x - b.x)) )
+    val angle = atan((b.y - a.y) / (b.x - a.x))
     return Line(a, angle)
 }
 
@@ -201,7 +201,7 @@ fun lineByPoints(a: Point, b: Point): Line {
 fun bisectorByPoints(a: Point, b: Point): Line {
     val x1 = abs(b.x + a.x) / 2
     val y1 = abs(b.y + a.y) / 2
-    val angle = PI / 2 - atan(abs((a.y - b.y) / (a.x - b.x)))
+    val angle = PI / 2 - atan((b.y - a.y) / (b.x - a.x))
     return Line(Point(x1, y1), angle)
 }
 
