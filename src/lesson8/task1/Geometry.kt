@@ -156,8 +156,7 @@ class Line private constructor(val b: Double, val angle: Double) {
      * Для этого необходимо составить и решить систему из двух уравнений (каждое для своей прямой)
      */
     fun crossPoint(other: Line): Point {
-        val y1 = (other.b - b * sin(other.angle) / sin(angle)) /
-                (cos(other.angle) - cos(angle) / sin(angle) * sin(other.angle))
+        val y1 = (other.b * sin(angle) - b * sin(other.angle)) / (cos(other.angle) * sin(angle) - cos(angle) * sin(other.angle))
         val x1 = (y1 * cos(angle) - b) / sin(angle)
         return Point(x1, y1)
     }
@@ -179,12 +178,7 @@ class Line private constructor(val b: Double, val angle: Double) {
  * Построить прямую по отрезку
  */
 fun lineBySegment(s: Segment): Line {
-    val angle = if (s.end.x == s.begin.x) PI / 2 else abs(atan((s.end.y - s.begin.y) / (s.end.x - s.begin.x)))
-    return Line(Point(s.begin.x, s.begin.y), angle)
-}
 
-fun main() {
-    println(lineBySegment(Segment(Point(-632.0, 0.8303959433329934), Point(2.220446049250313e-16, -632.0))))
 }
 
 /**
@@ -192,22 +186,14 @@ fun main() {
  *
  * Построить прямую по двум точкам
  */
-fun lineByPoints(a: Point, b: Point): Line {
-    val angle = if (b.x == a.x) PI / 2 else abs(atan((b.y - a.y) / (b.x - a.x)))
-    return Line(a, angle)
-}
+fun lineByPoints(a: Point, b: Point): Line = TODO()
 
 /**
  * Сложная
  *
  * Построить серединный перпендикуляр по отрезку или по двум точкам
  */
-fun bisectorByPoints(a: Point, b: Point): Line {
-    val x1 = (b.x + a.x) / 2
-    val y1 = (b.y + a.y) / 2
-    val angle = PI / 2 - abs(atan((b.y - a.y) / (b.x - a.x)))
-    return Line(Point(x1, y1), angle)
-}
+fun bisectorByPoints(a: Point, b: Point): Line = TODO()
 
 /**
  * Средняя
