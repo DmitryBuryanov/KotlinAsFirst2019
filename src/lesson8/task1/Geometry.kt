@@ -201,16 +201,14 @@ fun lineByPoints(a: Point, b: Point): Line = lineBySegment(Segment(a, b))
  *
  * Построить серединный перпендикуляр по отрезку или по двум точкам
  */
-fun bisectorByPoints(a: Point, b: Point): Line = TODO() /*{
-    var angle =
-        if (b.x > a.x && b.y > a.y || a.x > b.x && a.y > b.y)
-            atan(abs((b.y - a.y) / (b.x - a.x)))
-        else if (atan(abs((b.y - a.y) / (b.x - a.x))) == 0.0) 0.0
-        else PI - atan(abs((b.y - a.y) / (b.x - a.x)))
-    if (angle >= PI / 2) angle -= PI / 2
-    else angle += PI / 2
-    return Line(a, angle)
-}*/
+fun bisectorByPoints(a: Point, b: Point): Line {
+    val x1 = (a.x + b.x) / 2
+    val y1 = (a.y + b.y) / 2
+    var angle1 = (lineBySegment(Segment(a, b)).angle)
+    if (angle1 >= PI / 2) angle1 -= PI / 2
+    else if (angle1 < PI / 2) angle1 += PI / 2
+    return Line(Point(x1, y1), angle1)
+}
 
 /**
  * Средняя
