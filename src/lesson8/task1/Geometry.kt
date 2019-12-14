@@ -184,7 +184,7 @@ fun lineBySegment(s: Segment): Line {
     val angle =
         if (s.end.x > s.begin.x && s.end.y > s.begin.y || s.begin.x > s.end.x && s.begin.y > s.end.y)
             atan(abs((s.end.y - s.begin.y) / (s.end.x - s.begin.x)))
-        else if (atan(abs((s.end.y - s.begin.y) / (s.end.x - s.begin.x))) == 0.0) 0.0
+        else if (abs(s.end.y - s.begin.y) <= 1e-5) 0.0
         else PI - atan(abs((s.end.y - s.begin.y) / (s.end.x - s.begin.x)))
     return Line(s.begin, angle)
 }
@@ -194,14 +194,23 @@ fun lineBySegment(s: Segment): Line {
  *
  * Построить прямую по двум точкам
  */
-fun lineByPoints(a: Point, b: Point): Line = TODO()
+fun lineByPoints(a: Point, b: Point): Line = lineBySegment(Segment(a, b))
 
 /**
  * Сложная
  *
  * Построить серединный перпендикуляр по отрезку или по двум точкам
  */
-fun bisectorByPoints(a: Point, b: Point): Line = TODO()
+fun bisectorByPoints(a: Point, b: Point): Line = TODO() /*{
+    var angle =
+        if (b.x > a.x && b.y > a.y || a.x > b.x && a.y > b.y)
+            atan(abs((b.y - a.y) / (b.x - a.x)))
+        else if (atan(abs((b.y - a.y) / (b.x - a.x))) == 0.0) 0.0
+        else PI - atan(abs((b.y - a.y) / (b.x - a.x)))
+    if (angle >= PI / 2) angle -= PI / 2
+    else angle += PI / 2
+    return Line(a, angle)
+}*/
 
 /**
  * Средняя
