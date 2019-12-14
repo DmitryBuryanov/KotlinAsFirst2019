@@ -156,7 +156,10 @@ class Line private constructor(val b: Double, val angle: Double) {
      * Для этого необходимо составить и решить систему из двух уравнений (каждое для своей прямой)
      */
     fun crossPoint(other: Line): Point {
-        val x1 = (other.b * cos(angle) - b * cos(other.angle)) / (sin(angle) * cos(other.angle) - sin(other.angle) * cos(angle))
+        val x1 =
+            (other.b * cos(angle) - b * cos(other.angle)) / (sin(angle) * cos(other.angle) - sin(other.angle) * cos(
+                angle
+            ))
         val y1 = (x1 * sin(other.angle) + other.b) / cos(other.angle)
         return Point(x1, y1)
     }
@@ -178,9 +181,12 @@ class Line private constructor(val b: Double, val angle: Double) {
  * Построить прямую по отрезку
  */
 fun lineBySegment(s: Segment): Line {
-    var angle = atan(abs(s.end.y - s.begin.y) / (s.end.x - s.begin.x))
-    if (s.end.y < s.begin.y) angle = - angle
-    return (Line(s.begin, angle))
+    val angle =
+        if (s.end.x > s.begin.x && s.end.y > s.begin.y || s.begin.x > s.end.x && s.begin.y > s.end.y)
+            atan(abs((s.end.y - s.begin.y) / (s.end.x - s.begin.x)))
+        else if (atan(abs((s.end.y - s.begin.y) / (s.end.x - s.begin.x))) == 0.0) 0.0
+        else PI - atan(abs((s.end.y - s.begin.y) / (s.end.x - s.begin.x)))
+    return Line(s.begin, angle)
 }
 
 /**
@@ -188,11 +194,7 @@ fun lineBySegment(s: Segment): Line {
  *
  * Построить прямую по двум точкам
  */
-fun lineByPoints(a: Point, b: Point): Line {
-    var angle = atan(abs(b.y - a.y) / (b.x - a.x))
-    if (b.y < a.y) angle = - angle
-    return (Line(a, angle))
-}
+fun lineByPoints(a: Point, b: Point): Line = TODO()
 
 /**
  * Сложная
