@@ -26,9 +26,9 @@ data class Square(val column: Int, val row: Int) {
      * Для клетки не в пределах доски вернуть пустую строку
      */
     fun notation(): String {
-        if (column == 0 || row == 0) return ""
-        val columns = listOf("a", "b", "c", "d", "e", "f", "g", "h")
         val colNumbers = listOf(1, 2, 3, 4, 5, 6, 7, 8)
+        if (column !in colNumbers || row !in colNumbers) return ""
+        val columns = listOf("a", "b", "c", "d", "e", "f", "g", "h")
         for (i in colNumbers.indices) {
             if (colNumbers[i] == column) {
                 val x = columns[i]
@@ -138,7 +138,7 @@ fun rookTrajectory(start: Square, end: Square): List<Square> {
 fun bishopMoveNumber(start: Square, end: Square): Int {
     val colNumbers = listOf(1, 2, 3, 4, 5, 6, 7, 8)
     if ((start.row + start.column) % 2 != (end.row + end.column) % 2) return -1
-    if (start.column !in colNumbers || start.row !in colNumbers || end.row !in colNumbers || end.row !in colNumbers)
+    if (start.column !in colNumbers || start.row !in colNumbers || end.column !in colNumbers || end.row !in colNumbers)
         throw IllegalArgumentException()
     return if (start == end) 0
     else if (abs(start.row - end.row) == abs(start.column - end.column)) 1
@@ -203,7 +203,7 @@ fun kingMoveNumber(start: Square, end: Square): Int {
     val colNumbers = listOf(1, 2, 3, 4, 5, 6, 7, 8)
     var count = 0
     var checkSquare = start
-    if (start.column !in colNumbers || start.row !in colNumbers || end.row !in colNumbers || end.row !in colNumbers)
+    if (start.column !in colNumbers || start.row !in colNumbers || end.column !in colNumbers || end.row !in colNumbers)
         throw IllegalArgumentException()
     if (start == end) return 0
     else if (abs(start.row - end.row) == 1 && abs(start.column - end.column) == 1 || abs(start.row - end.row) == 1 &&
@@ -293,12 +293,43 @@ fun kingTrajectory(start: Square, end: Square): List<Square> {
  * Пример: knightMoveNumber(Square(3, 1), Square(6, 3)) = 3.
  * Конь может последовательно пройти через клетки (5, 2) и (4, 4) к клетке (6, 3).
  */
-fun checkSquare(square: Square) : Boolean {
+fun checkSquare(square: Square): Boolean {
     val colNumbers = listOf(1, 2, 3, 4, 5, 6, 7, 8)
-    return (square.column in colNumbers && square.row in colNumbers)
+    if (square.column !in colNumbers || square.row !in colNumbers) return false
+    return true
 }
 
-fun knightMoveNumber(start: Square, end: Square): Int = TODO()
+fun knightMoveNumber(start: Square, end: Square): Int {
+    val colNumbers = listOf(1, 2, 3, 4, 5, 6, 7, 8)
+    if (start.column !in colNumbers || start.row !in colNumbers || end.column !in colNumbers || end.row !in colNumbers)
+        throw IllegalArgumentException()
+    if (start == end) return 0
+    val everySquare = mutableSetOf(start)
+    var newSquare = start
+    var count = 0
+    while (newSquare != end) {
+        val newEverySquare = mutableSetOf<Square>()
+        for (elements in everySquare) {
+            if (checkSquare(Square(elements.column + 2, elements.row + 1))) newEverySquare.add(Square(elements.column + 2, elements.row + 1))
+            if (checkSquare(Square(elements.column + 1, elements.row + 2))) newEverySquare.add(Square(elements.column + 1, elements.row + 2))
+            if (checkSquare(Square(elements.column + 2, elements.row - 1))) newEverySquare.add(Square(elements.column + 2, elements.row - 1))
+            if (checkSquare(Square(elements.column + 1, elements.row - 2))) newEverySquare.add(Square(elements.column + 1, elements.row - 2))
+            if (checkSquare(Square(elements.column - 2, elements.row - 1))) newEverySquare.add(Square(elements.column - 2, elements.row - 1))
+            if (checkSquare(Square(elements.column - 1, elements.row - 2))) newEverySquare.add(Square(elements.column - 1, elements.row - 2))
+            if (checkSquare(Square(elements.column - 2, elements.row + 1))) newEverySquare.add(Square(elements.column - 2, elements.row + 1))
+            if (checkSquare(Square(elements.column - 1, elements.row + 2))) newEverySquare.add(Square(elements.column - 1, elements.row + 2))
+        }
+        count += 1
+        everySquare.addAll(newEverySquare)
+        for (elements in newEverySquare) {
+            if (elements == end) {
+                newSquare == elements
+                return count
+            }
+        }
+    }
+    return count
+}
 
 /**
  * Очень сложная
