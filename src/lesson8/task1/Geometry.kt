@@ -184,7 +184,7 @@ fun lineBySegment(s: Segment): Line {
     val angle =
         if (s.end.x > s.begin.x && s.end.y > s.begin.y || s.begin.x > s.end.x && s.begin.y > s.end.y)
             atan(abs((s.end.y - s.begin.y) / (s.end.x - s.begin.x)))
-        else if (abs(s.end.y - s.begin.y) <= 1e-5) 0.0
+        else if (abs(s.end.y - s.begin.y) == 0.0) 0.0
         else PI - atan(abs((s.end.y - s.begin.y) / (s.end.x - s.begin.x)))
     return Line(s.begin, angle)
 }

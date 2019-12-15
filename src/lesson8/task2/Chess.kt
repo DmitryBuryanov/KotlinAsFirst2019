@@ -83,7 +83,7 @@ fun square(notation: String): Square {
  */
 fun rookMoveNumber(start: Square, end: Square): Int {
     val colNumbers = listOf(1, 2, 3, 4, 5, 6, 7, 8)
-    if (start.column !in colNumbers || start.row !in colNumbers || end.row !in colNumbers || end.row !in colNumbers)
+    if (start.column !in colNumbers || start.row !in colNumbers || end.column !in colNumbers || end.row !in colNumbers)
         throw IllegalArgumentException()
     return if (start == end) 0
     else if (start.row == end.row || start.column == end.column) 1
@@ -137,9 +137,9 @@ fun rookTrajectory(start: Square, end: Square): List<Square> {
  */
 fun bishopMoveNumber(start: Square, end: Square): Int {
     val colNumbers = listOf(1, 2, 3, 4, 5, 6, 7, 8)
-    if ((start.row + start.column) % 2 != (end.row + end.column) % 2) return -1
     if (start.column !in colNumbers || start.row !in colNumbers || end.column !in colNumbers || end.row !in colNumbers)
         throw IllegalArgumentException()
+    if ((start.row + start.column) % 2 != (end.row + end.column) % 2) return -1
     return if (start == end) 0
     else if (abs(start.row - end.row) == abs(start.column - end.column)) 1
     else 2
