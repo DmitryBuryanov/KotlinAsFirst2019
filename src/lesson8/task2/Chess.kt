@@ -50,7 +50,7 @@ fun square(notation: String): Square {
     if (notation.length != 2) throw IllegalArgumentException()
     val columns = listOf("a", "b", "c", "d", "e", "f", "g", "h")
     val colNumbers = listOf(1, 2, 3, 4, 5, 6, 7, 8)
-    if (notation[0].toString() !in columns || notation[1].toInt() == null || notation[1].toString().toInt() !in colNumbers)
+    if (notation[0].toString() !in columns || notation[1].toString().toInt() !in colNumbers)
         throw IllegalArgumentException()
     for (i in columns.indices) {
         if (notation[0].toString() == columns[i]) return Square(colNumbers[i], notation[1].toString().toInt())
@@ -310,14 +310,62 @@ fun knightMoveNumber(start: Square, end: Square): Int {
     while (newSquare != end) {
         val newEverySquare = mutableSetOf<Square>()
         for (elements in everySquare) {
-            if (checkSquare(Square(elements.column + 2, elements.row + 1))) newEverySquare.add(Square(elements.column + 2, elements.row + 1))
-            if (checkSquare(Square(elements.column + 1, elements.row + 2))) newEverySquare.add(Square(elements.column + 1, elements.row + 2))
-            if (checkSquare(Square(elements.column + 2, elements.row - 1))) newEverySquare.add(Square(elements.column + 2, elements.row - 1))
-            if (checkSquare(Square(elements.column + 1, elements.row - 2))) newEverySquare.add(Square(elements.column + 1, elements.row - 2))
-            if (checkSquare(Square(elements.column - 2, elements.row - 1))) newEverySquare.add(Square(elements.column - 2, elements.row - 1))
-            if (checkSquare(Square(elements.column - 1, elements.row - 2))) newEverySquare.add(Square(elements.column - 1, elements.row - 2))
-            if (checkSquare(Square(elements.column - 2, elements.row + 1))) newEverySquare.add(Square(elements.column - 2, elements.row + 1))
-            if (checkSquare(Square(elements.column - 1, elements.row + 2))) newEverySquare.add(Square(elements.column - 1, elements.row + 2))
+            if (checkSquare(
+                    Square(
+                        elements.column + 2,
+                        elements.row + 1
+                    )
+                )
+            ) newEverySquare.add(Square(elements.column + 2, elements.row + 1))
+            if (checkSquare(
+                    Square(
+                        elements.column + 1,
+                        elements.row + 2
+                    )
+                )
+            ) newEverySquare.add(Square(elements.column + 1, elements.row + 2))
+            if (checkSquare(
+                    Square(
+                        elements.column + 2,
+                        elements.row - 1
+                    )
+                )
+            ) newEverySquare.add(Square(elements.column + 2, elements.row - 1))
+            if (checkSquare(
+                    Square(
+                        elements.column + 1,
+                        elements.row - 2
+                    )
+                )
+            ) newEverySquare.add(Square(elements.column + 1, elements.row - 2))
+            if (checkSquare(
+                    Square(
+                        elements.column - 2,
+                        elements.row - 1
+                    )
+                )
+            ) newEverySquare.add(Square(elements.column - 2, elements.row - 1))
+            if (checkSquare(
+                    Square(
+                        elements.column - 1,
+                        elements.row - 2
+                    )
+                )
+            ) newEverySquare.add(Square(elements.column - 1, elements.row - 2))
+            if (checkSquare(
+                    Square(
+                        elements.column - 2,
+                        elements.row + 1
+                    )
+                )
+            ) newEverySquare.add(Square(elements.column - 2, elements.row + 1))
+            if (checkSquare(
+                    Square(
+                        elements.column - 1,
+                        elements.row + 2
+                    )
+                )
+            ) newEverySquare.add(Square(elements.column - 1, elements.row + 2))
         }
         count += 1
         everySquare.addAll(newEverySquare)
@@ -351,4 +399,119 @@ fun knightMoveNumber(start: Square, end: Square): Int {
  *
  * Если возможно несколько вариантов самой быстрой траектории, вернуть любой из них.
  */
-fun knightTrajectory(start: Square, end: Square): List<Square> = TODO()
+fun knightTrajectory(start: Square, end: Square): List<Square> {
+    val result = listOf(start)
+    if (start == end) return result
+    val everySequence = mutableListOf(result)
+    var newSquare = start
+    while (newSquare != end) {
+        val newSequence = mutableListOf<List<Square>>()
+        for (elements in everySequence) {
+            if (checkSquare(
+                    Square(
+                        elements[elements.lastIndex].column + 2,
+                        elements[elements.lastIndex].row + 1
+                    )
+                )
+            ) newSequence.add(
+                elements + Square(
+                    elements[elements.lastIndex].column + 2,
+                    elements[elements.lastIndex].row + 1
+                )
+            )
+            if (checkSquare(
+                    Square(
+                        elements[elements.lastIndex].column + 1,
+                        elements[elements.lastIndex].row + 2
+                    )
+                )
+            ) newSequence.add(
+                elements + Square(
+                    elements[elements.lastIndex].column + 1,
+                    elements[elements.lastIndex].row + 2
+                )
+            )
+            if (checkSquare(
+                    Square(
+                        elements[elements.lastIndex].column + 2,
+                        elements[elements.lastIndex].row - 1
+                    )
+                )
+            ) newSequence.add(
+                elements + Square(
+                    elements[elements.lastIndex].column + 2,
+                    elements[elements.lastIndex].row - 1
+                )
+            )
+            if (checkSquare(
+                    Square(
+                        elements[elements.lastIndex].column + 1,
+                        elements[elements.lastIndex].row - 2
+                    )
+                )
+            ) newSequence.add(
+                elements + Square(
+                    elements[elements.lastIndex].column + 1,
+                    elements[elements.lastIndex].row - 2
+                )
+            )
+            if (checkSquare(
+                    Square(
+                        elements[elements.lastIndex].column - 2,
+                        elements[elements.lastIndex].row - 1
+                    )
+                )
+            ) newSequence.add(
+                elements + Square(
+                    elements[elements.lastIndex].column - 2,
+                    elements[elements.lastIndex].row - 1
+                )
+            )
+            if (checkSquare(
+                    Square(
+                        elements[elements.lastIndex].column - 1,
+                        elements[elements.lastIndex].row - 2
+                    )
+                )
+            ) newSequence.add(
+                elements + Square(
+                    elements[elements.lastIndex].column - 1,
+                    elements[elements.lastIndex].row - 2
+                )
+            )
+            if (checkSquare(
+                    Square(
+                        elements[elements.lastIndex].column - 2,
+                        elements[elements.lastIndex].row + 1
+                    )
+                )
+            ) newSequence.add(
+                elements + Square(
+                    elements[elements.lastIndex].column - 2,
+                    elements[elements.lastIndex].row + 1
+                )
+            )
+            if (checkSquare(
+                    Square(
+                        elements[elements.lastIndex].column - 1,
+                        elements[elements.lastIndex].row + 2
+                    )
+                )
+            ) newSequence.add(
+                elements + Square(
+                    elements[elements.lastIndex].column - 1,
+                    elements[elements.lastIndex].row + 2
+                )
+            )
+        }
+        everySequence.addAll(newSequence)
+        for (elements in newSequence) {
+            if (elements[elements.lastIndex] == end) {
+                newSquare = end
+                return elements
+            }
+        }
+    }
+    return result
+}
+
