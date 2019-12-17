@@ -160,7 +160,10 @@ class Line private constructor(val b: Double, val angle: Double) {
             (other.b * cos(angle) - b * cos(other.angle)) / (sin(angle) * cos(other.angle) - sin(other.angle) * cos(
                 angle
             ))
-        val y1 = (x1 * sin(other.angle) + other.b) / cos(other.angle)
+        val y1 =
+            (other.b * sin(angle) - b * sin(other.angle)) / (sin(angle) * cos(other.angle) - sin(other.angle) * cos(
+            angle
+        ))
         return Point(x1, y1)
     }
 
@@ -182,7 +185,7 @@ class Line private constructor(val b: Double, val angle: Double) {
  */
 fun lineBySegment(s: Segment): Line {
     val angle =
-        if (s.end.x > s.begin.x && s.end.y > s.begin.y || s.begin.x > s.end.x && s.begin.y > s.end.y)
+        if (s.end.x >= s.begin.x && s.end.y >= s.begin.y || s.begin.x >= s.end.x && s.begin.y >= s.end.y)
             atan(abs((s.end.y - s.begin.y) / (s.end.x - s.begin.x)))
         else if (atan(abs((s.end.y - s.begin.y) / (s.end.x - s.begin.x))) == 0.0) 0.0
         else (PI - atan(abs((s.end.y - s.begin.y) / (s.end.x - s.begin.x)))) % PI
@@ -247,10 +250,6 @@ fun circleByThreePoints(a: Point, b: Point, c: Point): Circle {
     return Circle(centre, radius)
 }
 
-fun main() {
-    println(circleByThreePoints(Point(0.08928213776699234, -632.0), Point(-632.0, 5e-324), Point(-632.0, -632.0)))
-}
-
 /**
  * Очень сложная
  *
@@ -263,4 +262,3 @@ fun main() {
  * соединяющий две самые удалённые точки в данном множестве.
  */
 fun minContainingCircle(vararg points: Point): Circle = TODO()
-

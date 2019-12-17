@@ -248,22 +248,7 @@ fun top20Words(inputName: String): Map<String, Int> {
         if (elements.matches(Regex("""[a-zа-яё]+"""))) result[elements] = result.getOrDefault(elements, 0) + 1
     }
     if (result.size <= 20) return result
-    val newresult = mutableMapOf<String, Int>()
-    var newkey = ""
-    var newvalue = 0
-    for (i in 1..20) {
-        var max1 = Int.MIN_VALUE
-        for ((key, value) in result) {
-            if (value > max1) {
-                max1 = value
-                newkey = key
-                newvalue = value
-            }
-        }
-        newresult.put(newkey, newvalue)
-        result.remove(newkey)
-    }
-    return newresult
+    return result.toList().sortedByDescending { it.second }.take(20).toMap()
 }
 
 
@@ -321,6 +306,9 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
                         val x = line[0]
                         val y = line[1]
                         line = line.replace(Regex("""$x$y"""), x.toString().toUpperCase() + y.toString().toLowerCase())
+                    }
+                    if (j == 0 && line[0].toString().matches(Regex("""[a-zа-я]"""))) {
+                        line = line.replace(line[0], line[0].toUpperCase())
                     }
                 }
             }
