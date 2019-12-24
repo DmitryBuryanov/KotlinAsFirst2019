@@ -92,13 +92,10 @@ fun sibilants(inputName: String, outputName: String) {
     for (lines in File(inputName).readLines()) {
         var line = ""
         for (i in lines.indices) {
-            if (lines[i] !in falsegl) line += lines[i].toString()
-            else if (i > 0) {
-                if (lines[i - 1] in sogl) {
-                    for (j in falsegl.indices) {
-                        if (lines[i] == falsegl[j]) line += truegl[j].toString()
-                    }
-                } else line += lines[i].toString()
+            line += if (lines[i] !in falsegl) lines[i].toString()
+            else {
+                if (i > 0 && lines[i - 1] in sogl) truegl[falsegl.indexOf(lines[i])].toString()
+                else lines[i].toString()
             }
         }
         output.write(line)
@@ -300,7 +297,7 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
                     if (line[i].toLowerCase() == key.toLowerCase()) newLine += value.toLowerCase()
                 }
             }
-            if (j == 0 && line[0] == line[0].toUpperCase()) {
+            if (j == 0) {
                 val x = newLine[0]
                 val y = newLine[0].toUpperCase()
                 newLine = newLine.replaceFirst(x, y)
