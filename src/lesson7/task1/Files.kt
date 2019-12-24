@@ -290,16 +290,17 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
     for (j in lines.indices) {
         var line = lines[j]
         var newLine = ""
-
         if (keys.isEmpty() || keys.intersect(line.toSet()).isEmpty()) newLine = line
         else if (keys.isNotEmpty()) {
             for (i in line.indices) {
                 if (line[i].toLowerCase() !in keys) newLine += line[i].toLowerCase()
                 for ((key, value) in dictionary) {
-                    if (line[i].toLowerCase() == key.toLowerCase()) newLine += value.toLowerCase()
+                    if (line[i].toLowerCase() == key.toLowerCase()) {
+                        newLine += if (line[i].isLowerCase()) value.toLowerCase()
+                        else value.toUpperCase()
+                    }
                 }
             }
-            if (j == 0 && newLine != "") newLine = newLine.replaceFirst(newLine[0], newLine[0].toUpperCase())
         }
         output.write(newLine)
         output.newLine()
