@@ -299,6 +299,7 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
                         newLine += if (line[i].isLowerCase() ||
                             !line[i].toString().matches(Regex("""^[а-яА-Яa-zA-Z]"""))) value.toLowerCase()
                         else if (value.length == 1) value.toUpperCase()
+                        else if (value.isEmpty()) value
                         else value[0].toUpperCase() + value.substring(1).toLowerCase()
                     }
                 }
