@@ -292,7 +292,6 @@ fun fromRoman(roman: String): Int {
     return if (roman1.isEmpty()) result else -1
 }
 
-
 /**
  * Очень сложная
  *

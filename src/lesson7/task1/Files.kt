@@ -90,16 +90,15 @@ fun sibilants(inputName: String, outputName: String) {
     val truegl = listOf('а', 'А', 'и', 'И', 'у', 'У')
     val output = File(outputName).bufferedWriter()
     for (lines in File(inputName).readLines()) {
-        var line = lines
-        for (i in 1 until lines.length) {
-            for (j in 0 until falsegl.size) {
-                if ((line[i - 1] in sogl) && (line[i] == falsegl[j])) {
-                    val x = falsegl[j]
-                    val y = truegl[j]
-                    val z = line[i - 1]
-                    line = line.replace(Regex("""$z$x"""), "$z$y")
+        var line = ""
+        for (i in lines.indices) {
+            if (lines[i] !in falsegl) line += lines[i].toString()
+            else if (lines[i - 1] in sogl) {
+                for (j in falsegl.indices) {
+                    if (lines[i] == falsegl[j]) line += truegl[j].toString()
                 }
             }
+            else line += lines[i].toString()
         }
         output.write(line)
         output.newLine()
@@ -132,10 +131,7 @@ fun centerFile(inputName: String, outputName: String) {
         if (lines.trim().length > maxlength) maxlength = lines.trim().length
     }
     for (lines in strings) {
-        var line = ""
-        for (i in 1..(maxlength - lines.trim().length) / 2) {
-            line += " "
-        }
+        var line = " ".repeat((maxlength - lines.trim().length) / 2)
         line += lines.trim()
         output.write(line)
         output.newLine()
@@ -251,7 +247,6 @@ fun top20Words(inputName: String): Map<String, Int> {
     return result.toList().sortedByDescending { it.second }.take(20).toMap()
 }
 
-
 /**
  * Средняя
  *
@@ -290,30 +285,25 @@ fun top20Words(inputName: String): Map<String, Int> {
 fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: String) {
     val output = File(outputName).bufferedWriter()
     val lines = File(inputName).readLines()
+    val keys = mutableListOf<Char>()
+    for ((key, value) in dictionary) {
+        keys.add(key.toLowerCase())
+    }
     for (j in lines.indices) {
-        var line = lines[j].toLowerCase()
-        val checkline = lines[j].toLowerCase()
-        for (i in checkline.indices) {
+        var line = lines[j]
+        var newLine = ""
+        for (i in line.indices) {
+            if (line[i].toLowerCase() !in keys) newLine += line[i].toLowerCase()
             for ((key, value) in dictionary) {
-                if (checkline[i] == key.toLowerCase()) {
-                    val z = checkline[i].toString()
-                    val k: String
-                    if (value.matches(Regex("""[a-zа-яA-ZА-Я]+"""))) k = value.toLowerCase()
-                    else k = value
-                    line = line.replace(z, k)
-                    if (line.isEmpty()) continue
-                    if ((i == 0) && (j == 0) && (line.length >= 2)) {
-                        val x = line[0]
-                        val y = line[1]
-                        line = line.replace(Regex("""$x$y"""), x.toString().toUpperCase() + y.toString().toLowerCase())
-                    }
-                    }
-                }
+                if (line[i].toLowerCase() == key.toLowerCase()) newLine += value.toLowerCase()
             }
-        if (j == 0 && line[0].toString().matches(Regex("""[a-zа-я]"""))) {
-            line = line.replace(line[0], line[0].toUpperCase())
         }
-        output.write(line)
+        if (j == 0) {
+            val x = newLine[0]
+            val y = newLine[0].toUpperCase()
+            newLine = newLine.replaceFirst(x, y)
+        }
+        output.write(newLine)
         output.newLine()
     }
     output.close()
@@ -347,11 +337,11 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
     val output = File(outputName).bufferedWriter()
     var max1 = Int.MIN_VALUE
     val strings = File(inputName).readLines()
-    var line = ""
+    var result = mutableListOf<String>()
     for (lines in strings) {
         if ((lines.length > max1) && (lines.toLowerCase().toSet().size == lines.length)) {
             max1 = lines.length
-            line = ""
+            result = mutableListOf()
         }
         if (lines.matches(Regex("""\s*"""))) break
         val simbols = mutableSetOf<Char>()
@@ -359,11 +349,11 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
             simbols.add(elements.toLowerCase())
         }
         if ((simbols.size == lines.length) && (lines.length == max1)) {
-            line += "$lines, "
+            result.add(lines)
         }
     }
-    if (line.matches(Regex("""\s*"""))) output.write(line)
-    else output.write(line.substring(0, line.length - 2))
+    if (result.size == 0) output.write("")
+    else output.write(result.joinToString(separator = ", "))
     output.close()
 }
 
