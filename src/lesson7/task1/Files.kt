@@ -283,14 +283,16 @@ fun top20Words(inputName: String): Map<String, Int> {
 fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: String) {
     val output = File(outputName).bufferedWriter()
     val lines = File(inputName).readLines()
-    val keys = mutableListOf<Char>()
+    val keys = mutableSetOf<Char>()
     for ((key) in dictionary) {
         keys.add(key.toLowerCase())
     }
     for (j in lines.indices) {
         var line = lines[j]
         var newLine = ""
-        if (keys.isNotEmpty()) {
+
+        if (keys.isEmpty() || keys.intersect(line.toSet()).isEmpty()) newLine = line
+        else if (keys.isNotEmpty()) {
             for (i in line.indices) {
                 if (line[i].toLowerCase() !in keys) newLine += line[i].toLowerCase()
                 for ((key, value) in dictionary) {
@@ -298,7 +300,7 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
                 }
             }
             if (j == 0 && newLine != "") newLine = newLine.replaceFirst(newLine[0], newLine[0].toUpperCase())
-        } else newLine = line
+        }
         output.write(newLine)
         output.newLine()
     }
