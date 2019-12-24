@@ -98,8 +98,8 @@ fun sibilants(inputName: String, outputName: String) {
                     for (j in falsegl.indices) {
                         if (lines[i] == falsegl[j]) line += truegl[j].toString()
                     }
-                }
-            } else line += lines[i].toString()
+                } else line += lines[i].toString()
+            }
         }
         output.write(line)
         output.newLine()
@@ -293,17 +293,19 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
     for (j in lines.indices) {
         var line = lines[j]
         var newLine = ""
-        for (i in line.indices) {
-            if (line[i].toLowerCase() !in keys) newLine += line[i].toLowerCase()
-            for ((key, value) in dictionary) {
-                if (line[i].toLowerCase() == key.toLowerCase()) newLine += value.toLowerCase()
+        if (keys.isNotEmpty()) {
+            for (i in line.indices) {
+                if (line[i].toLowerCase() !in keys) newLine += line[i].toLowerCase()
+                for ((key, value) in dictionary) {
+                    if (line[i].toLowerCase() == key.toLowerCase()) newLine += value.toLowerCase()
+                }
             }
-        }
-        if (j == 0 && line[0] == line[0].toUpperCase()) {
-            val x = newLine[0]
-            val y = newLine[0].toUpperCase()
-            newLine = newLine.replaceFirst(x, y)
-        }
+            if (j == 0 && line[0] == line[0].toUpperCase()) {
+                val x = newLine[0]
+                val y = newLine[0].toUpperCase()
+                newLine = newLine.replaceFirst(x, y)
+            }
+        } else newLine = line
         output.write(newLine)
         output.newLine()
     }
