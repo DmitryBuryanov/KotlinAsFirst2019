@@ -52,10 +52,7 @@ fun square(notation: String): Square {
     val colNumbers = listOf(1, 2, 3, 4, 5, 6, 7, 8)
     if (notation[0].toString() !in columns || notation[1].toString().toInt() !in colNumbers)
         throw IllegalArgumentException()
-    for (i in columns.indices) {
-        if (notation[0].toString() == columns[i]) return Square(colNumbers[i], notation[1].toString().toInt())
-    }
-    return Square(0, 0)
+    return Square(columns.indexOf(notation[0].toString()) + 1, notation[1].toString().toInt())
 }
 
 /**
@@ -200,31 +197,8 @@ fun bishopTrajectory(start: Square, end: Square): List<Square> {
  * Король может последовательно пройти через клетки (4, 2) и (5, 2) к клетке (6, 3).
  */
 fun kingMoveNumber(start: Square, end: Square): Int {
-    val colNumbers = listOf(1, 2, 3, 4, 5, 6, 7, 8)
-    var count = 0
-    var checkSquare = start
-    if (start.column !in colNumbers || start.row !in colNumbers || end.column !in colNumbers || end.row !in colNumbers)
-        throw IllegalArgumentException()
-    if (start == end) return 0
-    else if (abs(start.row - end.row) == 1 && abs(start.column - end.column) == 1 || abs(start.row - end.row) == 1 &&
-        abs(start.column - end.column) == 0 || abs(start.row - end.row) == 0 && abs(start.column - end.column) == 1
-    ) return 1
-    else {
-        while (end.row != checkSquare.row) {
-            if (end.row > checkSquare.row) {
-                checkSquare = if (end.column > checkSquare.column) Square(checkSquare.column + 1, checkSquare.row + 1)
-                else if (end.column < checkSquare.column) Square(checkSquare.column - 1, checkSquare.row + 1)
-                else Square(checkSquare.column, checkSquare.row + 1)
-            } else if (end.row < checkSquare.row) {
-                checkSquare = if (end.column > checkSquare.column) Square(checkSquare.column + 1, checkSquare.row - 1)
-                else if (end.column < checkSquare.column) Square(checkSquare.column - 1, checkSquare.row - 1)
-                else Square(checkSquare.column, checkSquare.row - 1)
-            }
-            count += 1
-        }
-    }
-    return if (checkSquare.column == end.column) count
-    else count + abs(checkSquare.column - end.column)
+    if (!checkSquare(start) || !checkSquare(end)) throw IllegalArgumentException()
+    return kingTrajectory(start, end).size - 1
 }
 
 /**
@@ -245,9 +219,6 @@ fun kingTrajectory(start: Square, end: Square): List<Square> {
     val result = mutableListOf(start)
     var checkSquare = start
     if (start == end) return result
-    else if (abs(start.row - end.row) == 1 && abs(start.column - end.column) == 1 || abs(start.row - end.row) == 1 &&
-        abs(start.column - end.column) == 0 || abs(start.row - end.row) == 0 && abs(start.column - end.column) == 1
-    ) return result + end
     else {
         while (end.row != checkSquare.row) {
             if (end.row > checkSquare.row) {
@@ -300,83 +271,8 @@ fun checkSquare(square: Square): Boolean {
 }
 
 fun knightMoveNumber(start: Square, end: Square): Int {
-    val colNumbers = listOf(1, 2, 3, 4, 5, 6, 7, 8)
-    if (start.column !in colNumbers || start.row !in colNumbers || end.column !in colNumbers || end.row !in colNumbers)
-        throw IllegalArgumentException()
-    if (start == end) return 0
-    val everySquare = mutableSetOf(start)
-    var newSquare = start
-    var count = 0
-    while (newSquare != end) {
-        val newEverySquare = mutableSetOf<Square>()
-        for (elements in everySquare) {
-            if (checkSquare(
-                    Square(
-                        elements.column + 2,
-                        elements.row + 1
-                    )
-                )
-            ) newEverySquare.add(Square(elements.column + 2, elements.row + 1))
-            if (checkSquare(
-                    Square(
-                        elements.column + 1,
-                        elements.row + 2
-                    )
-                )
-            ) newEverySquare.add(Square(elements.column + 1, elements.row + 2))
-            if (checkSquare(
-                    Square(
-                        elements.column + 2,
-                        elements.row - 1
-                    )
-                )
-            ) newEverySquare.add(Square(elements.column + 2, elements.row - 1))
-            if (checkSquare(
-                    Square(
-                        elements.column + 1,
-                        elements.row - 2
-                    )
-                )
-            ) newEverySquare.add(Square(elements.column + 1, elements.row - 2))
-            if (checkSquare(
-                    Square(
-                        elements.column - 2,
-                        elements.row - 1
-                    )
-                )
-            ) newEverySquare.add(Square(elements.column - 2, elements.row - 1))
-            if (checkSquare(
-                    Square(
-                        elements.column - 1,
-                        elements.row - 2
-                    )
-                )
-            ) newEverySquare.add(Square(elements.column - 1, elements.row - 2))
-            if (checkSquare(
-                    Square(
-                        elements.column - 2,
-                        elements.row + 1
-                    )
-                )
-            ) newEverySquare.add(Square(elements.column - 2, elements.row + 1))
-            if (checkSquare(
-                    Square(
-                        elements.column - 1,
-                        elements.row + 2
-                    )
-                )
-            ) newEverySquare.add(Square(elements.column - 1, elements.row + 2))
-        }
-        count += 1
-        everySquare.addAll(newEverySquare)
-        for (elements in newEverySquare) {
-            if (elements == end) {
-                newSquare == elements
-                return count
-            }
-        }
-    }
-    return count
+    if (!checkSquare(start) || !checkSquare(end)) throw IllegalArgumentException()
+    return knightTrajectory(start, end).size - 1
 }
 
 /**
