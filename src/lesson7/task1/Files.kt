@@ -283,29 +283,24 @@ fun top20Words(inputName: String): Map<String, Int> {
 fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: String) {
     val output = File(outputName).bufferedWriter()
     val lines = File(inputName).readLines()
-    val keys = mutableSetOf<Char>()
-    for ((key) in dictionary) {
-        keys.add(key.toLowerCase())
+    val newDictionary = mutableMapOf<Char, String>()
+    for ((key, value) in dictionary) {
+        newDictionary[key.toLowerCase()] = value.toLowerCase()
     }
-    for (j in lines.indices) {
-        var line = lines[j]
-        var newLine = ""
-        if (keys.isEmpty() || keys.intersect(line.toLowerCase().toSet()).isEmpty()) newLine = line
-        else if (keys.isNotEmpty()) {
-            for (i in line.indices) {
-                if (line[i].toLowerCase() !in keys) newLine += line[i]
-                for ((key, value) in dictionary) {
-                    if (line[i].toLowerCase() == key.toLowerCase()) {
-                        newLine += if (line[i].isLowerCase() || !line[i].toString().matches(Regex("""[A-Za-zА-Яа-я]""")))
-                            value.toLowerCase()
-                        else if (value.length == 1) value.toUpperCase()
-                        else if (value.isEmpty()) value
-                        else value[0].toUpperCase() + value.substring(1).toLowerCase()
-                    }
+    for (j in 0 until lines.size) {
+        var line = ""
+        for (elements in lines[j]) {
+            if (elements.toLowerCase() !in newDictionary.keys) line += elements
+            for ((key, value) in newDictionary) {
+                if (elements.toLowerCase() == key) {
+                    if (elements.isUpperCase()) {
+                        if (value.length < 2) line += value.toUpperCase()
+                        else line += value[0].toUpperCase() + value.substring(1)
+                    } else line += value.toLowerCase()
                 }
             }
         }
-        output.write(newLine)
+        output.write(line)
         output.newLine()
     }
     output.close()
