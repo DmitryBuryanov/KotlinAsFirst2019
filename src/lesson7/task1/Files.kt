@@ -284,7 +284,7 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
     val output = File(outputName).bufferedWriter()
     val lines = File(inputName).readLines()
     val keys = mutableListOf<Char>()
-    for ((key, value) in dictionary) {
+    for ((key) in dictionary) {
         keys.add(key.toLowerCase())
     }
     for (j in lines.indices) {
@@ -297,11 +297,7 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
                     if (line[i].toLowerCase() == key.toLowerCase()) newLine += value.toLowerCase()
                 }
             }
-            if (j == 0) {
-                val x = newLine[0]
-                val y = newLine[0].toUpperCase()
-                newLine = newLine.replaceFirst(x, y)
-            }
+            if (j == 0 && newLine != "") newLine = newLine.replaceFirst(newLine[0], newLine[0].toUpperCase())
         } else newLine = line
         output.write(newLine)
         output.newLine()
