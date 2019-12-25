@@ -3,7 +3,7 @@ package lesson8.task3
 import java.util.*
 
 class Graph {
-    private data class Vertex(val name: String) {
+    data class Vertex(val name: String) {
         val neighbors = mutableSetOf<Vertex>()
     }
 
@@ -47,6 +47,25 @@ class Graph {
             }
         }
         return -1
+    }
+
+    fun way(start: String, finish: String) = way(this[start], this[finish])
+
+    private fun way(start: Vertex, finish: Vertex): List<Vertex> {
+        val queue = ArrayDeque<Vertex>()
+        queue.add(start)
+        val visited = mutableMapOf(start to listOf(start))
+        while (queue.isNotEmpty()) {
+            val next = queue.poll()
+            val distance = visited[next]!!
+            if (next == finish) return distance
+            for (neighbor in next.neighbors) {
+                if (neighbor in visited) continue
+                visited[next]?.plus(neighbor)?.let { visited.put(neighbor, it) }
+                queue.add(neighbor)
+            }
+        }
+        return emptyList()
     }
 
     /**

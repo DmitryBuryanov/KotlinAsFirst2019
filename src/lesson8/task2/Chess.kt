@@ -2,6 +2,7 @@
 
 package lesson8.task2
 
+import lesson8.task3.Graph
 import java.lang.IllegalArgumentException
 import kotlin.math.abs
 
@@ -298,116 +299,65 @@ fun knightMoveNumber(start: Square, end: Square): Int {
 fun knightTrajectory(start: Square, end: Square): List<Square> {
     val result = listOf(start)
     if (start == end) return result
-    val everySequence = mutableListOf(result)
-    var newSquare = start
-    while (newSquare != end) {
-        val newSequence = mutableListOf<List<Square>>()
-        for (elements in everySequence) {
-            if (checkSquare(
-                    Square(
-                        elements[elements.lastIndex].column + 2,
-                        elements[elements.lastIndex].row + 1
-                    )
-                )
-            ) newSequence.add(
-                elements + Square(
-                    elements[elements.lastIndex].column + 2,
-                    elements[elements.lastIndex].row + 1
-                )
-            )
-            if (checkSquare(
-                    Square(
-                        elements[elements.lastIndex].column + 1,
-                        elements[elements.lastIndex].row + 2
-                    )
-                )
-            ) newSequence.add(
-                elements + Square(
-                    elements[elements.lastIndex].column + 1,
-                    elements[elements.lastIndex].row + 2
-                )
-            )
-            if (checkSquare(
-                    Square(
-                        elements[elements.lastIndex].column + 2,
-                        elements[elements.lastIndex].row - 1
-                    )
-                )
-            ) newSequence.add(
-                elements + Square(
-                    elements[elements.lastIndex].column + 2,
-                    elements[elements.lastIndex].row - 1
-                )
-            )
-            if (checkSquare(
-                    Square(
-                        elements[elements.lastIndex].column + 1,
-                        elements[elements.lastIndex].row - 2
-                    )
-                )
-            ) newSequence.add(
-                elements + Square(
-                    elements[elements.lastIndex].column + 1,
-                    elements[elements.lastIndex].row - 2
-                )
-            )
-            if (checkSquare(
-                    Square(
-                        elements[elements.lastIndex].column - 2,
-                        elements[elements.lastIndex].row - 1
-                    )
-                )
-            ) newSequence.add(
-                elements + Square(
-                    elements[elements.lastIndex].column - 2,
-                    elements[elements.lastIndex].row - 1
-                )
-            )
-            if (checkSquare(
-                    Square(
-                        elements[elements.lastIndex].column - 1,
-                        elements[elements.lastIndex].row - 2
-                    )
-                )
-            ) newSequence.add(
-                elements + Square(
-                    elements[elements.lastIndex].column - 1,
-                    elements[elements.lastIndex].row - 2
-                )
-            )
-            if (checkSquare(
-                    Square(
-                        elements[elements.lastIndex].column - 2,
-                        elements[elements.lastIndex].row + 1
-                    )
-                )
-            ) newSequence.add(
-                elements + Square(
-                    elements[elements.lastIndex].column - 2,
-                    elements[elements.lastIndex].row + 1
-                )
-            )
-            if (checkSquare(
-                    Square(
-                        elements[elements.lastIndex].column - 1,
-                        elements[elements.lastIndex].row + 2
-                    )
-                )
-            ) newSequence.add(
-                elements + Square(
-                    elements[elements.lastIndex].column - 1,
-                    elements[elements.lastIndex].row + 2
-                )
-            )
+    val letters = mutableListOf("a", "b", "c", "d", "e", "f", "g", "h")
+    val g = Graph()
+    for (i in 1..8) {
+        for (j in 1..8) {
+            val x = letters[i - 1]
+            g.addVertex("$x$j")
         }
-        everySequence.addAll(newSequence)
-        for (elements in newSequence) {
-            if (elements[elements.lastIndex] == end) {
-                newSquare = end
-                return elements
+    }
+    for (i in 1..8) {
+        for (j in 1..8) {
+            val k = letters[i - 1]
+            if (checkSquare(Square(i + 2, j + 1))) {
+                val x = letters[i + 2 - 1]
+                val y = j + 1
+                g.connect("$k$j", "$x$y")
+            }
+
+            if (checkSquare(Square(i + 1, j + 2))) {
+                val x = letters[i + 1 - 1]
+                val y = j + 2
+                g.connect("$k$j", "$x$y")
+            }
+
+            if (checkSquare(Square(i - 1, j + 2))) {
+                val x = letters[i - 1 - 1]
+                val y = j + 2
+                g.connect("$k$j", "$x$y")
+            }
+
+            if (checkSquare(Square(i - 2, j + 1))) {
+                val x = letters[i - 2 - 1]
+                val y = j + 1
+                g.connect("$k$j", "$x$y")
+            }
+
+            if (checkSquare(Square(i - 2, j - 1))) {
+                val x = letters[i - 2 - 1]
+                val y = j - 1
+                g.connect("$k$j", "$x$y")
+            }
+
+            if (checkSquare(Square(i - 1, j - 2))) {
+                val x = letters[i - 1 - 1]
+                val y = j - 2
+                g.connect("$k$j", "$x$y")
+            }
+
+            if (checkSquare(Square(i + 1, j - 2))) {
+                val x = letters[i + 1 - 1]
+                val y = j - 2
+                g.connect("$k$j", "$x$y")
+            }
+
+            if (checkSquare(Square(i + 2, j - 1))) {
+                val x = letters[i + 2 - 1]
+                val y = j - 1
+                g.connect("$k$j", "$x$y")
             }
         }
     }
-    return result
+    return g.way(start.notation(), end.notation()).map { square(it.name) }
 }
-
