@@ -50,7 +50,7 @@ fun square(notation: String): Square {
     if (notation.length != 2) throw IllegalArgumentException()
     val columns = listOf("a", "b", "c", "d", "e", "f", "g", "h")
     val colNumbers = listOf(1, 2, 3, 4, 5, 6, 7, 8)
-    if (notation[0].toString() !in columns || notation[1].toString().toInt() !in colNumbers)
+    if (notation[0].toString() !in columns || notation[1].toString().toIntOrNull() !in colNumbers)
         throw IllegalArgumentException()
     return Square(columns.indexOf(notation[0].toString()) + 1, notation[1].toString().toInt())
 }
