@@ -219,24 +219,21 @@ fun kingMoveNumber(start: Square, end: Square): Int {
 fun kingTrajectory(start: Square, end: Square): List<Square> {
     val result = mutableListOf(start)
     var checkSquare = start
-    if (start == end) return result
-    else {
-        while (end.row != checkSquare.row) {
-            if (end.row > checkSquare.row) {
-                checkSquare = if (end.column > checkSquare.column) Square(checkSquare.column + 1, checkSquare.row + 1)
-                else if (end.column < checkSquare.column) Square(checkSquare.column - 1, checkSquare.row + 1)
-                else Square(checkSquare.column, checkSquare.row + 1)
-            } else if (end.row < checkSquare.row) {
-                checkSquare = if (end.column > checkSquare.column) Square(checkSquare.column + 1, checkSquare.row - 1)
-                else if (end.column < checkSquare.column) Square(checkSquare.column - 1, checkSquare.row - 1)
-                else Square(checkSquare.column, checkSquare.row - 1)
-            }
-            result.add(checkSquare)
+    while (end.row != checkSquare.row) {
+        if (end.row > checkSquare.row) {
+            checkSquare = if (end.column > checkSquare.column) Square(checkSquare.column + 1, checkSquare.row + 1)
+            else if (end.column < checkSquare.column) Square(checkSquare.column - 1, checkSquare.row + 1)
+            else Square(checkSquare.column, checkSquare.row + 1)
+        } else if (end.row < checkSquare.row) {
+            checkSquare = if (end.column > checkSquare.column) Square(checkSquare.column + 1, checkSquare.row - 1)
+            else if (end.column < checkSquare.column) Square(checkSquare.column - 1, checkSquare.row - 1)
+            else Square(checkSquare.column, checkSquare.row - 1)
         }
+        result.add(checkSquare)
     }
     while (end.column != checkSquare.column) {
-        if (end.column < checkSquare.column) checkSquare = Square(checkSquare.column - 1, checkSquare.row)
-        else checkSquare = Square(checkSquare.column + 1, checkSquare.row)
+        checkSquare = if (end.column < checkSquare.column) Square(checkSquare.column - 1, checkSquare.row)
+        else Square(checkSquare.column + 1, checkSquare.row)
         result.add(checkSquare)
     }
     return result

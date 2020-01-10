@@ -4,6 +4,7 @@ package lesson7.task1
 
 import kotlinx.html.FIELDSET
 import java.io.File
+import java.lang.StringBuilder
 import kotlin.math.max
 
 /**
@@ -90,15 +91,15 @@ fun sibilants(inputName: String, outputName: String) {
     val truegl = listOf('а', 'А', 'и', 'И', 'у', 'У')
     val output = File(outputName).bufferedWriter()
     for (lines in File(inputName).readLines()) {
-        var line = ""
+        val builder = StringBuilder()
         for (i in lines.indices) {
-            line += if (lines[i] !in falsegl) lines[i].toString()
+            if (lines[i] !in falsegl) builder.append(lines[i])
             else {
-                if (i > 0 && lines[i - 1] in sogl) truegl[falsegl.indexOf(lines[i])].toString()
-                else lines[i].toString()
+                if (i > 0 && lines[i - 1] in sogl) builder.append(truegl[falsegl.indexOf(lines[i])])
+                else builder.append(lines[i])
             }
         }
-        output.write(line)
+        output.write(builder.toString())
         output.newLine()
     }
     output.close()
@@ -290,14 +291,11 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
     var line = ""
     for (elements in lines) {
         if (elements.toLowerCase() !in newDictionary.keys) line += elements
-        for ((key, value) in newDictionary) {
-            if (elements.toLowerCase() == key) {
-                line += if (elements.isUpperCase()) {
-                    if (value.length < 2) value.toUpperCase()
-                    else value[0].toUpperCase() + value.substring(1)
-                } else value.toLowerCase()
-            }
-        }
+        val x = newDictionary[elements.toLowerCase()]
+        if (x != null) line += if (elements.isUpperCase()) {
+            if (x.length < 2) x.toUpperCase()
+            else x[0].toUpperCase() + x.substring(1)
+        } else x.toLowerCase()
     }
     output.write(line)
     output.close()
